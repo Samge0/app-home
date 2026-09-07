@@ -1,0 +1,11 @@
+# 工作文件（生成脚本与中间数据，不发布）
+repos_raw.jsonl
+repos.json
+repos_alive.json
+process_repos.py
+check_alive.py
+gen_content.py
+assemble_prompt.py
+portfolio.md
+prompt.txt
+stderr.txt
