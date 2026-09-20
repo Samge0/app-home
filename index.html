@@ -3,584 +3,634 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Samge0 作品集 · 55 个在线项目</title>
-<meta name="description" content="Samge0 的 GitHub Pages 作品集：55 个可在线访问的项目，按仓库创建时间降序排列。">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 26 26'%3E%3Crect width='26' height='26' rx='7' fill='%234F46E5'/%3E%3Ctext x='13' y='17.5' font-family='Arial' font-size='13' font-weight='700' fill='white' text-anchor='middle'%3ES%3C/text%3E%3C/svg%3E">
+<title>Samge — AI Agent Engineer</title>
+<meta name="description" content="Samge 的个人主页：AI Agent 工程实践 — 决策模型评测、Agent 对战面板、桌面 Agent、研报 Agent、RAG 工具。">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23101010'/%3E%3Cpath d='M9 8l7 16 7-16' stroke='%2300d992' stroke-width='2.6' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
 <style>
-:root{--bg:#F6F6F4;--surface:#FFFFFF;--ink:#1D1D1B;--muted:#63625C;--line:#E7E6E1;
---primary:#4F46E5;--primary-deep:#4038CB;--primary-soft:#EEEDFC;--chip-bg:#F1F0EC;--chip-ink:#55544E;
---shadow:0 1px 2px rgba(29,29,27,.05),0 10px 28px -14px rgba(29,29,27,.12)}
+/* ── Design tokens · VoltAgent-inspired terminal aesthetic ──
+   canvas #101010 · accent #00d992 · ink #f2f2f2 · hairline #2a2a28 */
+:root{
+  --canvas:#101010; --canvas-2:#161615; --surface:#1a1a19; --surface-2:#202020;
+  --ink:#f2f2f2; --ink-dim:#d6d6d2; --body:#bdbdbd; --mute:#8b949e; --mute-2:#6b7280;
+  --accent:#00d992; --accent-soft:#2fd6a1; --accent-deep:#10b981; --accent-dim:rgba(0,217,146,.14);
+  --hairline:#2a2a28; --hairline-2:#222220;
+  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;
+  --sans:system-ui,-apple-system,"Segoe UI","PingFang SC","Noto Sans SC","Microsoft YaHei",sans-serif;
+  --serif:Georgia,"Times New Roman","Songti SC",SimSun,serif;
+}
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--ink);font-family:Inter,"Noto Sans SC","Segoe UI","Microsoft YaHei",sans-serif;
-line-height:1.65;-webkit-font-smoothing:antialiased}
-a{color:var(--primary);text-decoration:none}
-a:hover{text-decoration:none}
-.wrap{max-width:1120px;margin:0 auto;padding:0 24px}
-/* nav */
-.nav{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.72);
--webkit-backdrop-filter:blur(12px) saturate(1.4);backdrop-filter:blur(12px) saturate(1.4);
-border-bottom:1px solid var(--line)}
-.nav-inner{display:flex;align-items:center;justify-content:space-between;height:60px}
-.brand{display:flex;align-items:center;gap:10px;font-weight:700;color:var(--ink);font-size:1rem}
-.brand svg{display:block}
-.nav-links{display:flex;gap:8px;align-items:center}
-.nav-links a{color:var(--muted);font-size:.9rem;padding:7px 12px;border-radius:8px;transition:all .18s}
-.nav-links a:hover{color:var(--ink);background:var(--chip-bg)}
-.nav-links a.gh{display:flex;align-items:center;gap:6px;color:var(--ink);font-weight:600;
-border:1px solid var(--line);background:var(--surface)}
-.nav-links a.gh:hover{border-color:#D6D5CE}
-/* hero */
-.hero{position:relative;overflow:hidden;padding:104px 0 88px;text-align:center}
-.hero::before{content:"";position:absolute;inset:0;pointer-events:none;
-background:radial-gradient(560px 300px at 18% 8%,rgba(79,70,229,.09),transparent 62%),
-radial-gradient(520px 300px at 84% 16%,rgba(79,70,229,.07),transparent 60%)}
+body{background:var(--canvas);color:var(--body);font-family:var(--sans);line-height:1.7;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+::selection{background:rgba(0,217,146,.25);color:#fff}
+a{color:var(--accent);text-decoration:none}
+.wrap{max-width:1080px;margin:0 auto;padding:0 28px}
+kbd,code{font-family:var(--mono)}
+/* ── topbar ── */
+.topbar{position:fixed;top:0;left:0;right:0;z-index:60;background:rgba(16,16,16,.82);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border-bottom:1px solid var(--hairline-2)}
+.topbar-inner{display:flex;align-items:center;justify-content:space-between;height:56px}
+.brand{display:flex;align-items:center;gap:10px;font-family:var(--mono);font-size:.92rem;color:var(--ink)}
+.brand .sig{width:26px;height:26px;border-radius:6px;background:var(--canvas-2);border:1px solid var(--hairline);display:grid;place-items:center}
+.brand .sig svg{display:block}
+.brand .path{color:var(--mute)}
+.brand .path b{color:var(--ink);font-weight:600}
+.nav-links{display:flex;gap:4px;align-items:center}
+.nav-links a{font-size:.82rem;color:var(--mute);padding:6px 12px;border-radius:6px;transition:color .15s,background .15s}
+.nav-links a:hover{color:var(--ink);background:var(--surface-2)}
+.nav-links a.ghost{border:1px solid var(--hairline);border-radius:6px;color:var(--ink-dim);font-weight:600}
+.nav-links a.ghost:hover{border-color:var(--accent);color:var(--accent)}
+@media(max-width:640px){.nav-links a:not(.ghost){display:none}}
+/* ── hero ── */
+.hero{position:relative;padding:150px 0 96px}
+.hero-grid-bg{position:absolute;inset:0;pointer-events:none;
+  background-image:linear-gradient(var(--hairline-2) 1px,transparent 1px),linear-gradient(90deg,var(--hairline-2) 1px,transparent 1px);
+  background-size:44px 44px;
+  -webkit-mask-image:radial-gradient(ellipse 75% 62% at 50% 30%,#000 30%,transparent 75%);
+  mask-image:radial-gradient(ellipse 75% 62% at 50% 30%,#000 30%,transparent 75%);
+}
 .hero>.wrap{position:relative}
-.eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:.78rem;font-weight:600;letter-spacing:.14em;
-color:var(--primary);background:var(--primary-soft);border:1px solid #DEDBFA;border-radius:999px;padding:6px 14px}
-.eyebrow .dot{width:6px;height:6px;border-radius:50%;background:var(--primary)}
-.hero h1{margin:26px auto 0;font-size:clamp(2.1rem,4.6vw,3.3rem);font-weight:800;letter-spacing:-.02em;line-height:1.22;max-width:21ch}
-.hero h1 em{font-style:normal;color:var(--primary)}
-.lede{margin:18px auto 0;max-width:62ch;color:var(--muted);font-size:1.05rem}
-.stats{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;margin-top:38px}
-.stat{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px 26px;box-shadow:var(--shadow);min-width:150px}
-.stat b{display:block;font-size:1.5rem;font-weight:800;letter-spacing:-.01em}
-.stat span{display:block;margin-top:2px;font-size:.8rem;color:var(--muted)}
-.cta{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-top:38px}
-.btn{display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:.95rem;
-padding:12px 24px;border-radius:12px;transition:all .18s}
-.btn-primary{background:var(--primary);color:#fff;box-shadow:0 6px 16px -6px rgba(79,70,229,.5)}
-.btn-primary:hover{background:var(--primary-deep);transform:translateY(-1px)}
-.btn-ghost{background:var(--surface);color:var(--ink);border:1px solid var(--line);box-shadow:var(--shadow)}
-.btn-ghost:hover{border-color:#D6D5CE;transform:translateY(-1px)}
-/* projects */
-.projects{padding:8px 0 32px}
-.year-head{display:flex;align-items:center;gap:14px;margin:56px 0 22px}
-.year-head h2{font-size:1.45rem;font-weight:800;letter-spacing:-.01em}
-.year-head .count{font-size:.78rem;font-weight:600;color:var(--chip-ink);background:var(--chip-bg);
-border-radius:999px;padding:3px 12px}
-.year-head::after{content:"";flex:1;height:1px;background:var(--line)}
-.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
-@media(max-width:960px){.grid{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:620px){.grid{grid-template-columns:1fr}.hero{padding:76px 0 64px}}
-.card{display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--line);
-border-radius:14px;padding:20px;box-shadow:var(--shadow);transition:all .2s ease}
-.card:hover{transform:translateY(-3px);border-color:#D9D7FA;box-shadow:0 2px 4px rgba(29,29,27,.05),0 16px 34px -14px rgba(79,70,229,.18)}
-.card-top{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
-.card h3{font-size:1.02rem;font-weight:700;letter-spacing:-.01em;word-break:break-all}
-.card .date{flex-shrink:0;font-size:.74rem;color:var(--muted);font-variant-numeric:tabular-nums}
-.card .desc{margin-top:8px;font-size:.88rem;color:var(--muted);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;min-height:2.6em}
-.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
-.chip{font-size:.72rem;color:var(--chip-ink);background:var(--chip-bg);border-radius:6px;padding:2px 9px}
-.card-links{display:flex;align-items:center;gap:12px;margin-top:auto;padding-top:16px}
-.btn-live{display:inline-flex;align-items:center;gap:6px;font-size:.82rem;font-weight:600;color:#fff;
-background:var(--primary);border-radius:9px;padding:7px 14px;transition:all .18s}
-.btn-live:hover{background:var(--primary-deep)}
-.btn-src{display:inline-flex;align-items:center;gap:6px;font-size:.82rem;font-weight:600;color:var(--muted);transition:color .18s}
-.btn-src:hover{color:var(--ink)}
-/* about */
-.about{padding:72px 0 24px}
-.about-card{background:var(--surface);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);
-padding:40px;text-align:center}
-.about-card h2{font-size:1.4rem;font-weight:800}
-.about-card p{margin:14px auto 0;max-width:60ch;color:var(--muted)}
-.about-links{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-top:24px}
-/* footer */
-.footer{padding:44px 0 52px;text-align:center;color:var(--muted);font-size:.82rem}
-.footer a{color:var(--ink);font-weight:600}
-@media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto}}
+.terminal{max-width:660px;background:var(--canvas-2);border:1px solid var(--hairline);border-radius:10px;overflow:hidden;box-shadow:0 0 0 1px rgba(0,0,0,.4),0 24px 64px -24px rgba(0,0,0,.8),0 0 80px -30px rgba(0,217,146,.14)}
+.terminal-bar{display:flex;align-items:center;gap:8px;padding:10px 14px;border-bottom:1px solid var(--hairline-2);background:var(--surface)}
+.terminal-bar .dots{display:flex;gap:6px}
+.terminal-bar .dots i{width:11px;height:11px;border-radius:50%;background:#3a3a38}
+.terminal-bar .dots i:first-child{background:#4a3a3a}
+.terminal-bar .title{font-family:var(--mono);font-size:.72rem;color:var(--mute);margin-left:6px;letter-spacing:.04em}
+.terminal-body{padding:20px 22px 24px;font-family:var(--mono);font-size:.86rem;line-height:1.85;min-height:290px}
+.tl{color:var(--mute-2)}
+.prompt{color:var(--accent)}
+.prompt::before{content:"❯ ";color:var(--accent)}
+.cursor{display:inline-block;width:8px;height:17px;background:var(--accent);vertical-align:-3px;margin-left:2px;animation:blink 1.1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+.t-line{opacity:0;animation:lineIn .4s ease forwards}
+@keyframes lineIn{to{opacity:1}}
+.hero-side{position:absolute;right:28px;top:56px;width:300px}
+.hero-side .panel{background:var(--canvas-2);border:1px solid var(--hairline);border-radius:10px;overflow:hidden}
+.hero-side .panel + .panel{margin-top:14px}
+
+.hero-side .hint{font-family:var(--mono);font-size:.68rem;color:var(--mute-2);padding:8px 2px 0;display:flex;gap:8px}
+.hero-side .hint .k{border:1px solid var(--hairline);border-radius:4px;padding:0 5px;color:var(--mute)}
+.hero-scroll{padding:10px 14px 12px;font-family:var(--mono);font-size:.78rem}
+.hrow{display:flex;justify-content:space-between;gap:10px;padding:3px 0;color:var(--body)}
+.hrow .h-date{color:var(--mute-2);font-size:.72rem;flex-shrink:0}
+.hrow a{color:var(--ink-dim)}
+.hrow a:hover{color:var(--accent)}
+.h-title{font-family:var(--mono);font-size:.72rem;color:var(--mute);letter-spacing:.08em}
+.panel-head{font-family:var(--mono);font-size:.72rem;color:var(--mute);letter-spacing:.08em;padding:9px 14px;border-bottom:1px solid var(--hairline-2);display:flex;justify-content:space-between;align-items:center}
+.panel-head .live-dot{width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 8px var(--accent);animation:pulse 2s infinite}
+@keyframes pulse{50%{opacity:.35}}
+/* hero heading */
+.hero-copy{margin-top:44px;max-width:640px}
+.hero-copy h1{font-family:var(--sans);font-weight:700;font-size:clamp(1.9rem,4vw,2.8rem);letter-spacing:-.02em;color:var(--ink);line-height:1.25}
+.hero-copy h1 .dim{color:var(--mute-2);font-weight:400}
+.hero-copy p{margin-top:14px;font-size:1.02rem;color:var(--body);max-width:56ch}
+.hero-copy p b{color:var(--ink-dim);font-weight:600}
+.hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px;align-items:center}
+.btn{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:.85rem;font-weight:600;padding:10px 18px;border-radius:7px;transition:all .16s}
+.btn-primary{background:var(--accent);color:#0a0f0c}
+.btn-primary:hover{background:var(--accent-soft);transform:translateY(-1px)}
+.btn-outline{border:1px solid var(--hairline);color:var(--ink-dim);background:var(--canvas)}
+.btn-outline:hover{border-color:var(--accent);color:var(--accent)}
+.hero-meta{display:flex;gap:22px;flex-wrap:wrap;margin-top:34px;font-family:var(--mono);font-size:.76rem;color:var(--mute)}
+.hero-meta span b{color:var(--ink-dim);font-weight:600}
+/* ── section scaffolding ── */
+.sec{padding:88px 0}
+.sec-head{display:flex;align-items:baseline;gap:14px;margin-bottom:40px}
+.sec-head .idx{font-family:var(--mono);font-size:.78rem;color:var(--accent);letter-spacing:.06em}
+.sec-head h2{font-size:1.5rem;font-weight:700;color:var(--ink);letter-spacing:-.01em}
+.sec-head .line{flex:1;height:1px;background:var(--hairline-2);transform:translateY(-4px)}
+.sec-head .count{font-family:var(--mono);font-size:.72rem;color:var(--mute-2)}
+.sec-head .more{font-family:var(--mono);font-size:.76rem;color:var(--mute);flex-shrink:0;transform:translateY(-2px)}
+.sec-head .more:hover{color:var(--accent)}
+/* ── featured works (editorial rows) ── */
+.work{display:grid;grid-template-columns:56px 1fr;gap:0 26px;padding:52px 0;border-top:1px solid var(--hairline-2)}
+.work:first-of-type{border-top:none}
+.work-rail{font-family:var(--mono);font-size:.72rem;color:var(--mute-2);display:flex;flex-direction:column;gap:6px;align-items:flex-start}
+.work-rail .no{color:var(--mute)}
+.work-rail .kind{writing-mode:vertical-rl;text-orientation:mixed;letter-spacing:.14em;color:var(--mute-2);font-size:.64rem;margin-left:4px}
+.work-main{min-width:0}
+.work-head{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
+.work-head h3{font-size:1.35rem;font-weight:700;color:var(--ink);letter-spacing:-.01em}
+.work-head h3 a{color:inherit}
+.work-head h3 a:hover{color:var(--accent)}
+.work-head .sub{color:var(--mute);font-size:.92rem}
+.work-head .period{margin-left:auto;font-family:var(--mono);font-size:.72rem;color:var(--panel-head, #8b949e)}
+.work-tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.wtag{font-family:var(--mono);font-size:.68rem;color:var(--mute);border:1px solid var(--hairline);border-radius:999px;padding:2px 10px}
+.work-desc{margin-top:18px;display:grid;grid-template-columns:1fr 300px;gap:34px}
+.work-desc .summary{font-size:.98rem;color:var(--body)}
+.work-desc .summary b{color:var(--ink-dim);font-weight:600}
+.work-desc .story{margin-top:16px;border-left:2px solid var(--hairline);padding-left:16px}
+.work-desc .story p{font-size:.86rem;color:var(--mute);margin-top:8px;line-height:1.75}
+.work-desc .story p::before{content:"— ";color:var(--accent)}
+.work-visual{position:relative}
+/* visual stages per project */
+.stage{background:var(--canvas-2);border:1px solid var(--hairline);border-radius:10px;overflow:hidden;position:relative}
+.stage-head{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;border-bottom:1px solid var(--hairline-2);font-family:var(--mono);font-size:.68rem;color:var(--mute)}
+.stage-head .live-dot{width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 8px var(--accent);animation:pulse 2s infinite}
+.stage-body{padding:14px}
+/* jev-arena: mini tetris board + prob bars */
+.arena-board{display:grid;grid-template-columns:repeat(6,1fr);grid-auto-rows:20px;gap:2px;margin-bottom:12px}
+.arena-cell{background:var(--surface-2);border-radius:2px}
+.arena-cell.on{background:var(--accent-deep);box-shadow:0 0 6px rgba(0,217,146,.4) inset}
+.arena-cell.hi{background:#2fd6a1}
+.arena-piece{position:absolute;pointer-events:none}
+.prob-bars{display:flex;flex-direction:column;gap:5px}
+.prob-row{display:grid;grid-template-columns:38px 1fr 34px;gap:8px;align-items:center;font-family:var(--mono);font-size:.66rem;color:var(--mute)}
+.prob-row .bar{height:9px;background:var(--surface-2);border-radius:2px;overflow:hidden;position:relative}
+.prob-row .bar i{position:absolute;inset:0;right:auto;background:var(--accent);width:0;transition:width .9s cubic-bezier(.2,.7,.2,1)}
+.work.in .prob-row .bar i{width:var(--w)}
+.prob-row .val{color:var(--ink-dim);text-align:right}
+/* booster: soccer pitch + timeline */
+.pitch{position:relative;height:150px;background:
+  repeating-linear-gradient(90deg,transparent 0 24px,rgba(255,255,255,.025) 24px 25px);
+  border:1px solid var(--hairline);border-radius:6px;overflow:hidden}
+.pitch .mid{position:absolute;left:50%;top:0;bottom:0;width:1px;background:var(--hairline)}
+.pitch .circle{position:absolute;left:50%;top:50%;width:52px;height:52px;border:1px solid var(--hairline);border-radius:50%;transform:translate(-50%,-50%)}
+.pitch .robot{position:absolute;width:14px;height:14px;border-radius:3px;transition:transform 1.4s cubic-bezier(.3,.7,.3,1)}
+.pitch .robot.r{background:#e0604c;box-shadow:0 0 10px rgba(224,96,76,.5)}
+.pitch .robot.b{background:#3f7bd9;box-shadow:0 0 10px rgba(63,123,217,.5)}
+.pitch .ball{position:absolute;width:7px;height:7px;border-radius:50%;background:#fff;box-shadow:0 0 8px rgba(255,255,255,.6);transition:transform 1.4s cubic-bezier(.3,.7,.3,1)}
+.pitch .goal-glow{position:absolute;top:0;bottom:0;width:26px;left:0;background:linear-gradient(90deg,rgba(224,96,76,.15),transparent)}
+.pitch .goal-glow.r{left:auto;right:0;background:linear-gradient(-90deg,rgba(63,123,217,.15),transparent)}
+.scoreboard{display:flex;align-items:center;justify-content:center;gap:14px;font-family:var(--mono);margin-bottom:10px}
+.scoreboard .team{font-size:.72rem;color:var(--mute)}
+.scoreboard .score{font-size:1.3rem;font-weight:700;color:var(--ink)}
+.scoreboard .colon{color:var(--mute-2)}
+.scoreboard .clock{font-size:.72rem;color:var(--accent);margin-left:6px}
+.tl-events{margin-top:12px;display:flex;flex-direction:column;gap:4px;font-family:var(--mono);font-size:.66rem}
+.tl-ev{display:flex;gap:8px;color:var(--mute)}
+.tl-ev .t{color:var(--mute-2);flex-shrink:0;width:34px}
+.tl-ev .who.r{color:#e0604c}.tl-ev .who.b{color:#3f7bd9}
+.tl-ev.goal .txt{color:var(--ink-dim)}
+/* bizowl: chat + memory blocks */
+.chatbox{display:flex;flex-direction:column;gap:9px}
+.msg{max-width:86%;padding:8px 12px;border-radius:11px;font-size:.78rem;line-height:1.6}
+.msg.user{align-self:flex-end;background:#255a45;color:#d9f5e9;border-bottom-right-radius:3px}
+.msg.ai{align-self:flex-start;background:var(--surface-2);color:var(--ink-dim);border-bottom-left-radius:3px}
+.msg.ai .typing{display:inline-flex;gap:4px}
+.msg.ai .typing i{width:5px;height:5px;border-radius:50%;background:var(--mute);animation:tp 1.2s infinite}
+.msg.ai .typing i:nth-child(2){animation-delay:.15s}
+.msg.ai .typing i:nth-child(3){animation-delay:.3s}
+@keyframes tp{0%,60%,100%{opacity:.25}30%{opacity:1}}
+.mem-registry{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}
+.mem-chip{font-family:var(--mono);font-size:.62rem;color:var(--accent-soft);background:var(--accent-dim);border:1px solid rgba(0,217,146,.25);border-radius:5px;padding:2px 8px;animation:memIn .5s ease both}
+@keyframes memIn{from{opacity:0;transform:translateY(4px)}}
+/* report sage: pipeline + score dial */
+.pipeline{display:flex;align-items:center;gap:0;margin-top:14px;flex-wrap:wrap}
+.pnode{font-family:var(--mono);font-size:.66rem;color:var(--body);border:1px solid var(--hairline);border-radius:6px;padding:5px 10px;background:var(--canvas)}
+.pnode.on{border-color:var(--accent);color:var(--accent)}
+.parrow{width:18px;height:1px;background:var(--hairline);margin:0 4px;position:relative}
+.parrow::after{content:"";position:absolute;right:0;top:-2px;border:3px solid transparent;border-left-color:var(--hairline)}
+.score-list{margin-top:14px;display:flex;flex-direction:column;gap:7px;font-family:var(--mono);font-size:.68rem}
+.score-row{display:grid;grid-template-columns:1fr auto 30px;gap:10px;align-items:center}
+.score-row .name{color:var(--mute)}
+.score-row .bar{height:8px;background:var(--surface-2);border-radius:2px;overflow:hidden;width:110px}
+.score-row .bar i{display:block;height:100%;background:var(--accent);width:0;transition:width 1s ease}
+.work.in .score-row .bar i{width:var(--w)}
+.score-row .val{color:var(--ink-dim);text-align:right}
+/* ragflow: file queue + progress */
+.fileq{display:flex;flex-direction:column;gap:7px;font-family:var(--mono);font-size:.7rem}
+.frow{display:grid;grid-template-columns:auto 1fr 90px auto;gap:10px;align-items:center;color:var(--mute)}
+.frow .fname{color:var(--ink-dim);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.frow .st{font-size:.64rem;padding:1px 7px;border-radius:4px;border:1px solid var(--hairline);color:var(--mute)}
+.frow.done .st{color:var(--accent);border-color:rgba(0,217,146,.3)}
+.frow.done .fname{color:var(--body)}
+.frow .pbar{display:inline-block;height:7px;background:var(--surface-2);border:1px solid var(--hairline-2);overflow:hidden;border-radius:2px}
+.frow .pbar i{display:block;height:100%;width:0;background:var(--accent);transition:width 1.2s ease}
+.work.in .frow .pbar i{width:var(--w)}
+.frow.done .pbar i{width:100%}
+.stage-foot{display:flex;justify-content:space-between;align-items:center;padding:8px 12px;border-top:1px
+ solid var(--hairline-2);font-family:var(--mono);font-size:.66rem;color:var(--mute-2)}
+.fork-icon{color:var(--accent);opacity:.7}
+/* facts strip */
+.work-facts{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
+.wfact{display:flex;flex-direction:column;gap:2px;border:1px solid var(--hairline);border-radius:8px;padding:10px 14px;min-width:150px;background:var(--canvas-2)}
+.wfact .k{font-family:var(--mono);font-size:.64rem;color:var(--mute-2);letter-spacing:.06em}
+.wfact .v{font-size:.84rem;color:var(--ink-dim)}
+.work-links{margin-top:20px}
+.work-links a{font-family:var(--mono);font-size:.78rem;color:var(--mute);display:inline-flex;align-items:center;gap:6px;margin-right:18px}
+.work-links a:hover{color:var(--accent)}
+.work-links a::before{content:"↗";color:var(--accent)}
+/* ── stack section ── */
+.stack-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--hairline-2);border:1px solid var(--hairline-2);border-radius:10px;overflow:hidden}
+.stack-cell{background:var(--canvas);padding:22px 20px}
+.stack-cell h4{font-family:var(--mono);font-size:.7rem;color:var(--accent);letter-spacing:.1em;margin-bottom:12px}
+.stack-cell p{font-size:.82rem;color:var(--body);line-height:1.8}
+.stack-cell p code{font-size:.76rem;color:var(--ink-dim);background:var(--surface);border:1px solid var(--hairline-2);border-radius:4px;padding:1px 6px}
+@media(max-width:960px){.stack-grid{grid-template-columns:repeat(2,1fr)}}
+/* ── archive teaser ── */
+.archive-teaser{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--hairline-2);border:1px solid var(--hairline-2);border-radius:10px;overflow:hidden;margin-top:8px}
+.at-cell{background:var(--canvas);padding:26px 26px 22px;display:flex;flex-direction:column;gap:6px;transition:background .2s}
+.at-cell:hover{background:var(--canvas-2)}
+.at-cell .k{font-family:var(--mono);font-size:.68rem;color:var(--mute-2)}
+.at-cell .n{font-size:1.7rem;font-weight:700;color:var(--ink);font-family:var(--mono)}
+.at-cell .d{font-size:.8rem;color:var(--mute)}
+.at-cell a.stretched{position:absolute;inset:0}
+.at-cell{position:relative}
+@media(max-width:760px){.archive-teaser{grid-template-columns:1fr}}
+/* ── footer ── */
+footer{border-top:1px solid var(--hairline-2);padding:44px 0 56px;margin-top:40px}
+.foot-inner{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;font-family:var(--mono);font-size:.74rem;color:var(--mute-2)}
+.foot-inner a{color:var(--mute)}
+.foot-inner a:hover{color:var(--accent)}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.cursor{animation:none}}
+@media(max-width:960px){
+  .hero{padding:120px 0 72px}
+  .hero-side{display:none}
+  .work{grid-template-columns:1fr;padding:40px 0}
+  .work-rail{flex-direction:row;align-items:center}
+  .work-rail .kind{writing-mode:horizontal-tb}
+  .work-desc{grid-template-columns:1fr}
+  .work-head .period{margin-left:0}
+}
 </style>
 </head>
 <body>
-<nav class="nav"><div class="wrap nav-inner">
-<a class="brand" href="#top"><svg width="26" height="26" viewBox="0 0 26 26" aria-hidden="true"><rect width="26" height="26" rx="7" fill="#4F46E5"/><text x="13" y="17.5" font-family="Inter,Segoe UI,sans-serif" font-size="13" font-weight="700" fill="#FFFFFF" text-anchor="middle">S</text></svg><span>Samge0</span></a>
-<div class="nav-links">
-<a href="#projects">作品</a>
-<a href="#about">关于</a>
-<a class="gh" href="https://github.com/Samge0" target="_blank" rel="noopener"><svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>GitHub</a>
-</div></div></nav>
-<header class="hero" id="top"><div class="wrap">
-<span class="eyebrow"><span class="dot"></span>GITHUB PAGES · 在线作品集</span>
-<h1>把 <em>55 个在线项目</em>，<br>装进一页作品集</h1>
-<p class="lede">从 AI Agent 与桌面应用，到 MCP 服务、爬虫自动化与计算机视觉——这里汇总了我所有配置了 GitHub Pages 的公开仓库，每一个都能点开即看。</p>
-<div class="stats">
-<div class="stat"><b>55</b><span>在线项目</span></div>
-<div class="stat"><b>2020–2026</b><span>持续构建</span></div>
-<div class="stat"><b>100%</b><span>站点逐站校验可用</span></div>
-</div>
-<div class="cta">
-<a class="btn btn-primary" href="#projects">浏览作品集</a>
-<a class="btn btn-ghost" href="https://github.com/Samge0" target="_blank" rel="noopener"><svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>GitHub @Samge0</a>
-</div></div></header>
-<main class="projects wrap" id="projects">
-<section aria-label="2026 年项目">
-<div class="year-head"><h2>2026 年</h2><span class="count">18 个项目</span></div>
-<div class="grid">
-<article class="card">
-<div class="card-top"><h3>AgentInterview</h3><span class="date">2026-09-02</span></div>
-<p class="desc">仿多邻国交互样式的Agent面试题学习小工具</p>
-<div class="chips"><span class="chip">HTML</span></div>
-<div class="card-links">
-<a class="btn-live" href="https://ms-agent.samgeai.com/app/" target="_blank" rel="noopener">在线访问 <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 1h7v7M11 1 5 7"/></svg></a>
-<a class="btn-src" href="https://github.com/Samge0/AgentInterview" target="_blank" rel="noopener"><svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>源码</a>
-</div></article>
-<article class="card">
-<div class="card-top"><h3>mind-docs</h3><span class="date">2026-08-18</span></div>
-<p class="desc">个人整理的知识思维导图-仅用于记录</p>
-<div class="chips"><span class="chip">Python</span></div>
-<div class="card-links">
-<a class="btn-live" href="https://samge0.github.io/mind-docs/" target="_blank" rel="noopener">在线访问 <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 1h7v7M11 1 5 7"/></svg></a>
-<a class="btn-src" href="https://github.com/Samge0/mind-docs" target="_blank" rel="noopener"><svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>源码</a>
-</div></article>
-<article class="card">
-<div class="card-top"><h3>dsh-plugin-nexterm</h3><span class="date">2026-08-17</span></div>
-<p class="desc">使用Nexterm进行批量运维的DeepSeek Harness插件</p>
-<div class="chips"><span class="chip">JavaScript</span></div>
-<div class="card-links">
-<a class="btn-live" href="https://samge0.github.io/dsh-plugin-nexterm/" target="_blank" rel="noopener">在线访问 <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 1h7v7M11 1 5 7"/></svg></a>
-<a class="btn-src" href="https://github.com/Samge0/dsh-plugin-nexterm" target="_blank" rel="noopener"><svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>源码</a>
-</div></article>
-<article class="card">
-<div class="card-top"><h3>dsh-plugin-qcc</h3><span class="date">2026-08-15</span></div>
-<p class="desc">Qichacha (企查查) company-data plugin for DeepSeek Harness — 5 agent tools + settings-page QR login. Unofficial, for personal study.</p>
-<div class="chips"><span class="chip">JavaScript</span><span class="chip">agent-tools</span><span class="chip">company-data</span><span class="chip">cordis-plugin</span></div>
-<div class="card-links">
-<a class="btn-live" href="https://samge0.github.io/dsh-plugin-qcc/" target="_blank" rel="noopener">在线访问 <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 1h7v7M11 1 5 7"/></svg></a>
-<a class="btn-src" href="https://github.com/Samge0/dsh-plugin-qcc" target="_blank" rel="noopener"><svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>源码</a>
-</div></article>
-<article class="card">
-<div class="card-top"><h3>AgentDoc</h3><span class="date">2026-08-13</span></div>
-<p class="desc">AI Agent / 大模型应用开发学习教程合集</p>
-<div class="chips"><span class="chip">Python</span></div>
-<div class="card-links">
-<a class="btn-live" href="https://samge0.github.io/AgentDoc/" target="_blank" rel="noopener">在线访问 <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 1h7v7M11 1 5 7"/></svg></a>
-<a class="btn-src" href="https://github.com/Samge0/AgentDoc" target="_blank" rel="noopener"><svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>源码</a>
-</div></article>
-<article class="card">
-<div class="card-top"><h3>boxuegu-video</h3><span class="date">2026-08-08</span></div>
-<p class="desc">基于 Electron 的博学谷视频播放客户端</p>
-<div class="chips"><span class="chip">JavaScript</span></div>
-<div class="card-links">
-<a class="btn-live" href="https://samge0.github.io/boxuegu-video/" target="_blank" rel="noopener">在线访问 <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 1h7v7M11 1 5 7"/></svg></a>
-<a class="btn-src" href="https://github.com/Samge0/boxuegu-video" target="_blank" rel="noopener"><svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>源码</a>
-</div></article>
-<article class="card">
-<div class="card-top"><h3>BizOwl</h3><span class="date">2026-08-07</span></div>
-<p class="desc">一个基于 Electron 的轻量级 AI 商业助手桌面Agent应用</p>
-<div class="chips"><span class="chip">JavaScript</span></div>
-<div class="card-links">
-<a class="btn-live" href="https://samge0.github.io/BizOwl/" target="_blank" rel="noopener">在线访问 <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 1h7v7M11 1 5 7"/></svg></a>
-<a class="btn-src" href="https://github.com/Samge0/BizOwl" target="_blank" rel="noopener"><svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>源码</a>
-</div></article>
-<article class="card">
-<div class="card-top"><h3>mypac</h3><span class="date">2026-07-28</span></div>
-<p class="desc">轻量级 PAC 自动代理服务</p>
-<div class="chips"><span class="chip">Python</span></div>
-<div class="card-links">
-<a class="btn-live" href="https://samge0.github.io/mypac/" target="_blank" rel="noopener">在线访问 <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 1h7v7M11 1 5 7"/></svg></a>
-<a class="btn-src" href="https://github.com/Samge0/mypac" target="_blank" rel="noopener"><svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>源码</a>
-</div></article>
-<article class="card">
-<div class="card-top"><h3>hermes-research-report-webui</h3><span class="date">2026-07-24</span></div>
-<p class="desc">一个基于hermes-研究报告agent的独立webui</p>
-<div class="chips"><span class="chip">HTML</span></div>
-<div class="card-links">
-<a class="btn-live" href="https://samge0.github.io/hermes-research-report-webui/" target="_blank" rel="noopener">在线访问 <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 1h7v7M11 1 5 7"/></svg></a>
-<a class="btn-src" href="https://github.com/Samge0/hermes-research-report-webui" target="_blank" rel="noopener"><svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>源码</a>
-</div></article>
-<article class="card">
-<div class="card-top"><h3>hermes-research-report-agent</h3><span class="date">2026-07-24</span></div>
-<p class="desc">基于hermes构建的研究报告分析师 Agent —— 输入任意主题，自动多源数据采集、多维度打分评估、生成结构化 PDF 报告。</p>
-<div class="chips"><span class="chip">Python</span></div>
-<div class="card-links">
-<a class="btn-live" href="https://samge0.github.io/hermes-research-report-agent/" target="_blank" rel="noopener">在线访问 <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 1h7v7M11 1 5 7"/></svg></a>
-<a class="btn-src" href="https://github.com/Samge0/hermes-research-report-agent" target="_blank" rel="noopener"><svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>源码</a>
-</div></article>
-<article class="card">
-<div class="card-top"><h3>ai-agent-book-skill</h3><span class="date">2026-07-22</span></div>
-<p class="desc">A collection of ready-to-use AI Agent skills distilled from &quot;Deep Understanding of AI Agents&quot; by Li Bojie (Bojie Li).</p>
-<div class="card-links">
-<a class="btn-live" href="https://samge0.github.io/ai-agent-book-skill/" target="_blank" rel="noopener">在线访问 <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 1h7v7M11 1 5 7"/></svg></a>
-<a class="btn-src" href="https://github.com/Samge0/ai-agent-book-skill" target="_blank" rel="noopener"><svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>源码</a>
-</div></article>
-<article class="card">
-<div class="card-top"><h3>booster-match-runner</h3><span class="date">2026-07-15</span></div>
-<p class="desc">A sidebar panel for **Booster Studio** that runs **3v3 robot soccer matches** between two agents (Red vs Blue), with live score, key-event timeline, headless runs, and automatic match-record archiving.</p>
-<div class="chips"><span class="chip">TypeScript</span></div>
-<div class="card-links">
-<a class="btn-live" href="https://samge0.github.io/booster-match-runner/" target="_blank" rel="noopener">在线访问 <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 1h7v7M11 1 5 7"/></svg></a>
-<a class="btn-src" href="https://github.com/Samge0/booster-match-runner" target="_blank" rel="noopener"><svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>源码</a>
-</div></article>
-<article class="card">
-<div class="card-top"><h3>velxio-updater</h3><span class="date">2026-05-08</span></div>
-<p class="desc">A CLI tool to update velxio projects from local `diagram.json` and `sketch.ino` files.</p>
-<div class="chips"><span class="chip">Python</span></div>
-<div class="card-links">
-<a class="btn-live" href="https://samge0.github.io/velxio-updater/" target="_blank" rel="noopener">在线访问 <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 1h7v7M11 1 5 7"/></svg></a>
-<a class="btn-src" href="https://github.com/Samge0/velxio-updater" target="_blank" rel="noopener"><svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>源码</a>
-</div></article>
-<article class="card">
-<div class="card-top"><h3>ros2-install-script</h3><span class="date">2026-04-28</span></div>
-<p class="desc">ros2 install script</p>
-<div class="chips"><span class="chip">Shell</span></div>
-<div class="card-links">
-<a class="btn-live" href="https://samge0.github.io/ros2-install-script/" target="_blank" rel="noopener">在线访问 <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 1h7v7M11 1 5 7"/></svg></a>
-<a class="btn-src" href="https://github.com/Samge0/ros2-install-script" target="_blank" rel="noopener"><svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>源码</a>
-</div></article>
-<article class="card">
-<div class="card-top"><h3>pixelle-video-mcp-server</h3><span class="date">2026-04-22</span></div>
-<p class="desc">基于 FastMCP 的视频生成 MCP 服务器，使用 Playwright 自动化操作 Pixelle-Video 应用生成视频</p>
-<div class="chips"><span class="chip">Python</span></div>
-<div class="card-links">
-<a class="btn-live" href="https://samge0.github.io/pixelle-video-mcp-server/" target="_blank" rel="noopener">在线访问 <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 1h7v7M11 1 5 7"/></svg></a>
-<a class="btn-src" href="https://github.com/Samge0/pixelle-video-mcp-server" target="_blank" rel="noopener"><svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>源码</a>
-</div></article>
-<article class="card">
-<div class="card-top"><h3>ai-interview</h3><span class="date">2026-04-20</span></div>
-<p class="desc">AI 深访实验</p>
-<div class="chips"><span class="chip">HTML</span></div>
-<div class="card-links">
-<a class="btn-live" href="https://samge0.github.io/ai-interview/" target="_blank" rel="noopener">在线访问 <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 1h7v7M11 1 5 7"/></svg></a>
-<a class="btn-src" href="https://github.com/Samge0/ai-interview" target="_blank" rel="noopener"><svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>源码</a>
-</div></article>
-<article class="card">
-<div class="card-top"><h3>wyy-artist-recorder</h3><span class="date">2026-04-20</span></div>
-<p class="desc">定时监控网易云音乐歌手信息变化，记录数据变更并发送通知。</p>
-<div class="chips"><span class="chip">Python</span></div>
-<div class="card-links">
-<a class="btn-live" href="https://samge0.github.io/wyy-artist-recorder/" target="_blank" rel="noopener">在线访问 <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 1h7v7M11 1 5 7"/></svg></a>
-<a class="btn-src" href="https://github.com/Samge0/wyy-artist-recorder" target="_blank" rel="noopener"><svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>源码</a>
-</div></article>
-<article class="card">
-<div class="card-top"><h3>mbti-agents-sandbox</h3><span class="date">2026-04-16</span></div>
-<p class="desc">基于 AgentScope 框架的多 agent 模拟沙盘，演示 16 种不同 MBTI 人格类型的 agent 进行圆桌讨论 - 仅Demo。</p>
-<div class="chips"><span class="chip">Python</span></div>
-<div class="card-links">
-<a class="btn-live" href="https://samge0.github.io/mbti-agents-sandbox/" target="_blank" rel="noopener">在线访问 <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 1h7v7M11 1 5 7"/></svg></a>
-<a class="btn-src" href="https://github.com/Samge0/mbti-agents-sandbox" target="_blank" rel="noopener"><svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>源码</a>
-</div></article>
-</div></section>
-<section aria-label="2025 年项目">
-<div class="year-head"><h2>2025 年</h2><span class="count">5 个项目</span></div>
-<div class="grid">
-<article class="card">
-<div class="card-top"><h3>chromium-jsrpc</h3><span class="date">2025-08-15</span></div>
-<p class="desc">Chromium JsRPC 是一个基于 Docker 的容器化解决方案，集成了 Chromium 浏览器和 JsRpc 工具， 免证书配置</p>
-<div class="chips"><span class="chip">Dockerfile</span></div>
-<div class="card-links">
-<a class="btn-live" href="https://samge0.github.io/chromium-jsrpc/" target="_blank" rel="noopener">在线访问 <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 1h7v7M11 1 5 7"/></svg></a>
-<a class="btn-src" href="https://github.com/Samge0/chromium-jsrpc" target="_blank" rel="noopener"><svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>源码</a>
-</div></article>
-<article class="card">
-<div class="card-top"><h3>dlg_cv_demo</h3><span class="date">2025-06-07</span></div>
-<p class="desc">多邻国自动答题的demo，基于cv识别+adb截图&amp;点击</p>
-<div class="chips"><span class="chip">Python</span></div>
-<div class="card-links">
-<a class="btn-live" href="https://samge0.github.io/dlg_cv_demo/" target="_blank" rel="noopener">在线访问 <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 1h7v7M11 1 5 7"/></svg></a>
-<a class="btn-src" href="https://github.com/Samge0/dlg_cv_demo" target="_blank" rel="noopener"><svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>源码</a>
-</div></article>
-<article class="card">
-<div class="card-top"><h3>SimpleShooterGame</h3><span class="date">2025-03-25</span></div>
-<p class="desc">一款使用 `Godot引擎` + `godot-mcp` + `cursor` + `trae` 构建的 2D 自上而下射击游戏，玩家需要在收集道具和获得高分的同时生存多个敌人波次。</p>
-<div class="chips"><span class="chip">GDScript</span></div>
-<div class="card-links">
-<a class="btn-live" href="https://samge0.github.io/SimpleShooterGame/" target="_blank" rel="noopener">在线访问 <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 1h7v7M11 1 5 7"/></svg></a>
-<a class="btn-src" href="https://github.com/Samge0/SimpleShooterGame" target="_blank" rel="noopener"><svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>源码</a>
-</div></article>
-<article class="card">
-<div class="card-top"><h3>mcp-qqmusic-test-server</h3><span class="date">2025-03-24</span></div>
-<p class="desc">这是一个通过MCP（模块化控制协议）提供QQ音乐搜索功能的测试服务器。该服务器允许您使用关键词搜索音乐曲目，并返回相关歌曲信息。</p>
-<div class="chips"><span class="chip">Python</span></div>
-<div class="card-links">
-<a class="btn-live" href="https://samge0.github.io/mcp-qqmusic-test-server/" target="_blank" rel="noopener">在线访问 <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 1h7v7M11 1 5 7"/></svg></a>
-<a class="btn-src" href="https://github.com/Samge0/mcp-qqmusic-test-server" target="_blank" rel="noopener"><svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>源码</a>
-</div></article>
-<article class="card">
-<div class="card-top"><h3>video-cutter</h3><span class="date">2025-03-09</span></div>
-<p class="desc">A web application (built with Trae) that allows users to upload videos and cut them to specific time segments using a simple and intuitive interface.</p>
-<div class="chips"><span class="chip">HTML</span></div>
-<div class="card-links">
-<a class="btn-live" href="https://samge0.github.io/video-cutter/" target="_blank" rel="noopener">在线访问 <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 1h7v7M11 1 5 7"/></svg></a>
-<a class="btn-src" href="https://github.com/Samge0/video-cutter" target="_blank" rel="noopener"><svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>源码</a>
-</div></article>
-</div></section>
-<section aria-label="2024 年项目">
-<div class="year-head"><h2>2024 年</h2><span class="count">23 个项目</span></div>
-<div class="grid">
-<article class="card">
-<div class="card-top"><h3>wujindongri</h3><span class="date">2024-12-07</span></div>
-<p class="desc">无尽冬日自动点击治疗+自动狩猎脚本</p>
-<div class="chips"><span class="chip">Python</span></div>
-<div class="card-links">
-<a class="btn-live" href="https://samge0.github.io/wujindongri/" target="_blank" rel="noopener">在线访问 <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 1h7v7M11 1 5 7"/></svg></a>
-<a class="btn-src" href="https://github.com/Samge0/wujindongri" target="_blank" rel="noopener"><svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>源码</a>
-</div></article>
-<article class="card">
-<div class="card-top"><h3>parse-baidumap</h3><span class="date">2024-12-02</span></div>
-<p class="desc">百度围栏坐标解析-小工具</p>
-<div class="chips"><span class="chip">Python</span></div>
-<div class="card-links">
-<a class="btn-live" href="https://samge0.github.io/parse-baidumap/" target="_blank" rel="noopener">在线访问 <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 1h7v7M11 1 5 7"/></svg></a>
-<a class="btn-src" href="https://github.com/Samge0/parse-baidumap" target="_blank" rel="noopener"><svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>源码</a>
-</div></article>
-<article class="card">
-<div class="card-top"><h3>json2arkts</h3><span class="date">2024-11-10</span></div>
-<p class="desc">一个Gradio构建的简单应用，用户输入JSON，转为鸿蒙ArkTS的接口（Interface）或类（Class）</p>
-<div class="chips"><span class="chip">Python</span></div>
-<div class="card-links">
-<a class="btn-live" href="https://samge0.github.io/json2arkts/" target="_blank" rel="noopener">在线访问 <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 1h7v7M11 1 5 7"/></svg></a>
-<a class="btn-src" href="https://github.com/Samge0/json2arkts" target="_blank" rel="noopener"><svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>源码</a>
-</div></article>
-<article class="card">
-<div class="card-top"><h3>F5-TTS-API</h3><span class="date">2024-10-31</span></div>
-<p class="desc">F5-TTS的api，docker运行</p>
-<div class="chips"><span class="chip">Python</span></div>
-<div class="card-links">
-<a class="btn-live" href="https://samge0.github.io/F5-TTS-API/" target="_blank" rel="noopener">在线访问 <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 1h7v7M11 1 5 7"/></svg></a>
-<a class="btn-src" href="https://github.com/Samge0/F5-TTS-API" target="_blank" rel="noopener"><svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>源码</a>
-</div></article>
-<article class="card">
-<div class="card-top"><h3>ttsmaker-download</h3><span class="date">2024-10-18</span></div>
-<p class="desc">下载ttsmaker的示例音频，用于搭配F5 TTS测试生成效果</p>
-<div class="chips"><span class="chip">Python</span></div>
-<div class="card-links">
-<a class="btn-live" href="https://samge0.github.io/ttsmaker-download/" target="_blank" rel="noopener">在线访问 <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 1h7v7M11 1 5 7"/></svg></a>
-<a class="btn-src" href="https://github.com/Samge0/ttsmaker-download" target="_blank" rel="noopener"><svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>源码</a>
-</div></article>
-<article class="card">
-<div class="card-top"><h3>manim-examples</h3><span class="date">2024-10-18</span></div>
-<p class="desc">manim官网中的examples，v0.8.1版本</p>
-<div class="chips"><span class="chip">Jupyter Notebook</span></div>
-<div class="card-links">
-<a class="btn-live" href="https://samge0.github.io/manim-examples/" target="_blank" rel="noopener">在线访问 <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 1h7v7M11 1 5 7"/></svg></a>
-<a class="btn-src" href="https://github.com/Samge0/manim-examples" target="_blank" rel="noopener"><svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>源码</a>
-</div></article>
-<article class="card">
-<div class="card-top"><h3>ms-swift-train</h3><span class="date">2024-09-13</span></div>
-<p class="desc">使用 ms-swift 框架微调 Qwen1.5-7B-chat 模型并转换为 Ollama 支持格式的实践</p>
-<div class="chips"><span class="chip">Python</span></div>
-<div class="card-links">
-<a class="btn-live" href="https://samge0.github.io/ms-swift-train/" target="_blank" rel="noopener">在线访问 <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 1h7v7M11 1 5 7"/></svg></a>
-<a class="btn-src" href="https://github.com/Samge0/ms-swift-train" target="_blank" rel="noopener"><svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>源码</a>
-</div></article>
-<article class="card">
-<div class="card-top"><h3>doccano-docker</h3><span class="date">2024-09-06</span></div>
-<p class="desc">Fixed the &quot;no data available&quot; issue when adding Custom REST Request in Doccano.</p>
-<div class="chips"><span class="chip">Dockerfile</span></div>
-<div class="card-links">
-<a class="btn-live" href="https://samge0.github.io/doccano-docker/" target="_blank" rel="noopener">在线访问 <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 1h7v7M11 1 5 7"/></svg></a>
-<a class="btn-src" href="https://github.com/Samge0/doccano-docker" target="_blank" rel="noopener"><svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>源码</a>
-</div></article>
-<article class="card">
-<div class="card-top"><h3>test2neo4j</h3><span class="date">2024-08-30</span></div>
-<p class="desc">Text2Neo4j 是一个遍历文档、从文本中提取关系并将其保存到 Neo4j 数据库中以形成知识图谱的工具。本项目结合了 Dify 和 LLaMA3.1（8B 模型）来高效处理和提取复杂关系。</p>
-<div class="chips"><span class="chip">Python</span></div>
-<div class="card-links">
-<a class="btn-live" href="https://samge0.github.io/test2neo4j/" target="_blank" rel="noopener">在线访问 <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 1h7v7M11 1 5 7"/></svg></a>
-<a class="btn-src" href="https://github.com/Samge0/test2neo4j" target="_blank" rel="noopener"><svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>源码</a>
-</div></article>
-<article class="card">
-<div class="card-top"><h3>dify-upload</h3><span class="date">2024-08-29</span></div>
-<p class="desc">Automate the batch upload and parsing of documents into Dify&#x27;s knowledge base, reducing manual intervention and wait time.</p>
-<div class="chips"><span class="chip">Python</span></div>
-<div class="card-links">
-<a class="btn-live" href="https://samge0.github.io/dify-upload/" target="_blank" rel="noopener">在线访问 <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 1h7v7M11 1 5 7"/></svg></a>
-<a class="btn-src" href="https://github.com/Samge0/dify-upload" target="_blank" rel="noopener"><svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>源码</a>
-</div></article>
-<article class="card">
-<div class="card-top"><h3>ragflow-upload</h3><span class="date">2024-08-26</span></div>
-<p class="desc">自动批量上传并解析文档至 RagFlow 知识库，省去手动操作，提升效率。</p>
-<div class="chips"><span class="chip">Python</span></div>
-<div class="card-links">
-<a class="btn-live" href="https://samge0.github.io/ragflow-upload/" target="_blank" rel="noopener">在线访问 <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 1h7v7M11 1 5 7"/></svg></a>
-<a class="btn-src" href="https://github.com/Samge0/ragflow-upload" target="_blank" rel="noopener"><svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>源码</a>
-</div></article>
-<article class="card">
-<div class="card-top"><h3>doc-crawler</h3><span class="date">2024-08-26</span></div>
-<p class="desc">为了将一些页面文档内容下载并转为markdown文件&amp;上传到RAG知识库中查询，写一个脚本实现。</p>
-<div class="chips"><span class="chip">Python</span></div>
-<div class="card-links">
-<a class="btn-live" href="https://samge0.github.io/doc-crawler/" target="_blank" rel="noopener">在线访问 <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 1h7v7M11 1 5 7"/></svg></a>
-<a class="btn-src" href="https://github.com/Samge0/doc-crawler" target="_blank" rel="noopener"><svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>源码</a>
-</div></article>
-<article class="card">
-<div class="card-top"><h3>DockerProxyOneKey</h3><span class="date">2024-08-13</span></div>
-<p class="desc">在魔法服务器中一键部署docker的镜像加速服务，搭配Caddy2+Cloudflare自动配置TLS.</p>
-<div class="chips"><span class="chip">Shell</span></div>
-<div class="card-links">
-<a class="btn-live" href="https://samge0.github.io/DockerProxyOneKey/" target="_blank" rel="noopener">在线访问 <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 1h7v7M11 1 5 7"/></svg></a>
-<a class="btn-src" href="https://github.com/Samge0/DockerProxyOneKey" target="_blank" rel="noopener"><svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>源码</a>
-</div></article>
-<article class="card">
-<div class="card-top"><h3>remove-watermark-xhs</h3><span class="date">2024-06-17</span></div>
-<p class="desc">移除小红书logo水印的demo</p>
-<div class="chips"><span class="chip">Python</span></div>
-<div class="card-links">
-<a class="btn-live" href="https://samge0.github.io/remove-watermark-xhs/" target="_blank" rel="noopener">在线访问 <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 1h7v7M11 1 5 7"/></svg></a>
-<a class="btn-src" href="https://github.com/Samge0/remove-watermark-xhs" target="_blank" rel="noopener"><svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>源码</a>
-</div></article>
-<article class="card">
-<div class="card-top"><h3>yolo8-watermark-xhs</h3><span class="date">2024-06-13</span></div>
-<p class="desc">小红书logo的水印检测demo</p>
-<div class="chips"><span class="chip">Python</span></div>
-<div class="card-links">
-<a class="btn-live" href="https://samge0.github.io/yolo8-watermark-xhs/" target="_blank" rel="noopener">在线访问 <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 1h7v7M11 1 5 7"/></svg></a>
-<a class="btn-src" href="https://github.com/Samge0/yolo8-watermark-xhs" target="_blank" rel="noopener"><svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>源码</a>
-</div></article>
-<article class="card">
-<div class="card-top"><h3>IOPaint-docker</h3><span class="date">2024-06-07</span></div>
-<p class="desc">基于IOPaint构建docker镜像</p>
-<div class="chips"><span class="chip">Python</span></div>
-<div class="card-links">
-<a class="btn-live" href="https://samge0.github.io/IOPaint-docker/" target="_blank" rel="noopener">在线访问 <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 1h7v7M11 1 5 7"/></svg></a>
-<a class="btn-src" href="https://github.com/Samge0/IOPaint-docker" target="_blank" rel="noopener"><svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>源码</a>
-</div></article>
-<article class="card">
-<div class="card-top"><h3>yolo8-plus-iopaint</h3><span class="date">2024-05-31</span></div>
-<p class="desc">本demo使用ultralytics-YOLO8对水印位置进行模型训练&amp;检测，然后使用IOPaint移除检测到的水印。</p>
-<div class="chips"><span class="chip">Python</span></div>
-<div class="card-links">
-<a class="btn-live" href="https://samge0.github.io/yolo8-plus-iopaint/" target="_blank" rel="noopener">在线访问 <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 1h7v7M11 1 5 7"/></svg></a>
-<a class="btn-src" href="https://github.com/Samge0/yolo8-plus-iopaint" target="_blank" rel="noopener"><svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>源码</a>
-</div></article>
-<article class="card">
-<div class="card-top"><h3>yolo8-watermark-brand</h3><span class="date">2024-05-31</span></div>
-<p class="desc">使用labelImg对水印位置进行标注，ultralytics-YOLO8对水印位置进行模型训练&amp;检测。</p>
-<div class="chips"><span class="chip">Python</span></div>
-<div class="card-links">
-<a class="btn-live" href="https://samge0.github.io/yolo8-watermark-brand/" target="_blank" rel="noopener">在线访问 <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 1h7v7M11 1 5 7"/></svg></a>
-<a class="btn-src" href="https://github.com/Samge0/yolo8-watermark-brand" target="_blank" rel="noopener"><svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>源码</a>
-</div></article>
-<article class="card">
-<div class="card-top"><h3>ChatTTS-fork</h3><span class="date">2024-05-29</span></div>
-<p class="desc">ChatTTS-fork</p>
-<div class="chips"><span class="chip">Jupyter Notebook</span></div>
-<div class="card-links">
-<a class="btn-live" href="https://samge0.github.io/ChatTTS-fork/" target="_blank" rel="noopener">在线访问 <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 1h7v7M11 1 5 7"/></svg></a>
-<a class="btn-src" href="https://github.com/Samge0/ChatTTS-fork" target="_blank" rel="noopener"><svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>源码</a>
-</div></article>
-<article class="card">
-<div class="card-top"><h3>samge-blog</h3><span class="date">2024-05-27</span></div>
-<p class="desc">samge-blog</p>
-<div class="card-links">
-<a class="btn-live" href="https://samge0.github.io/samge-blog/" target="_blank" rel="noopener">在线访问 <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 1h7v7M11 1 5 7"/></svg></a>
-<a class="btn-src" href="https://github.com/Samge0/samge-blog" target="_blank" rel="noopener"><svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>源码</a>
-</div></article>
-<article class="card">
-<div class="card-top"><h3>paddleocr</h3><span class="date">2024-04-29</span></div>
-<p class="desc">一个简易的ocr识别图片中数字的api接口 + 简易的token校验。</p>
-<div class="chips"><span class="chip">Python</span></div>
-<div class="card-links">
-<a class="btn-live" href="https://samge0.github.io/paddleocr/" target="_blank" rel="noopener">在线访问 <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 1h7v7M11 1 5 7"/></svg></a>
-<a class="btn-src" href="https://github.com/Samge0/paddleocr" target="_blank" rel="noopener"><svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>源码</a>
-</div></article>
-<article class="card">
-<div class="card-top"><h3>hello-hexo</h3><span class="date">2024-03-28</span></div>
-<p class="desc">hello-hexo</p>
-<div class="card-links">
-<a class="btn-live" href="https://samge0.github.io/hello-hexo/" target="_blank" rel="noopener">在线访问 <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 1h7v7M11 1 5 7"/></svg></a>
-<a class="btn-src" href="https://github.com/Samge0/hello-hexo" target="_blank" rel="noopener"><svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>源码</a>
-</div></article>
-<article class="card">
-<div class="card-top"><h3>vscode-samge-translate</h3><span class="date">2024-01-27</span></div>
-<p class="desc">Vscode Samge Translate 翻译助手：Quickly translate text right in your code 🚀 支持多种翻译命令（英译中、中译英、中文转多规则命名变量等），支持多种结果展示方式，支持配置百度、阿里、腾讯、火山、有道、DeepL翻译引擎。</p>
-<div class="chips"><span class="chip">TypeScript</span></div>
-<div class="card-links">
-<a class="btn-live" href="https://samge0.github.io/vscode-samge-translate/" target="_blank" rel="noopener">在线访问 <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 1h7v7M11 1 5 7"/></svg></a>
-<a class="btn-src" href="https://github.com/Samge0/vscode-samge-translate" target="_blank" rel="noopener"><svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>源码</a>
-</div></article>
-</div></section>
-<section aria-label="2023 年项目">
-<div class="year-head"><h2>2023 年</h2><span class="count">7 个项目</span></div>
-<div class="grid">
-<article class="card">
-<div class="card-top"><h3>forward_openai</h3><span class="date">2023-11-01</span></div>
-<p class="desc">go+docker转发OpenAI的API接口，部署在海外服务器即可对(https://api.openai.com进行代理，支持stream流。</p>
-<div class="chips"><span class="chip">Go</span></div>
-<div class="card-links">
-<a class="btn-live" href="https://samge0.github.io/forward_openai/" target="_blank" rel="noopener">在线访问 <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 1h7v7M11 1 5 7"/></svg></a>
-<a class="btn-src" href="https://github.com/Samge0/forward_openai" target="_blank" rel="noopener"><svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>源码</a>
-</div></article>
-<article class="card">
-<div class="card-top"><h3>notionai-api-py</h3><span class="date">2023-05-11</span></div>
-<p class="desc">一个简易的页面 NotionAI api接口 + 简易的token校验。</p>
-<div class="chips"><span class="chip">Python</span></div>
-<div class="card-links">
-<a class="btn-live" href="https://samge0.github.io/notionai-api-py/" target="_blank" rel="noopener">在线访问 <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 1h7v7M11 1 5 7"/></svg></a>
-<a class="btn-src" href="https://github.com/Samge0/notionai-api-py" target="_blank" rel="noopener"><svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>源码</a>
-</div></article>
-<article class="card">
-<div class="card-top"><h3>apk-copilot</h3><span class="date">2023-04-05</span></div>
-<p class="desc">一个简易的ApkCopilot 多渠道打包&amp;签名 + gradio操作界面。</p>
-<div class="chips"><span class="chip">Python</span></div>
-<div class="card-links">
-<a class="btn-live" href="https://samge0.github.io/apk-copilot/" target="_blank" rel="noopener">在线访问 <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 1h7v7M11 1 5 7"/></svg></a>
-<a class="btn-src" href="https://github.com/Samge0/apk-copilot" target="_blank" rel="noopener"><svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>源码</a>
-</div></article>
-<article class="card">
-<div class="card-top"><h3>openai-api-calcul</h3><span class="date">2023-03-24</span></div>
-<p class="desc">一个简易的openai的接口计费api接口 + 简易的token校验 + gradio操作界面。</p>
-<div class="chips"><span class="chip">Python</span></div>
-<div class="card-links">
-<a class="btn-live" href="https://samge0.github.io/openai-api-calcul/" target="_blank" rel="noopener">在线访问 <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 1h7v7M11 1 5 7"/></svg></a>
-<a class="btn-src" href="https://github.com/Samge0/openai-api-calcul" target="_blank" rel="noopener"><svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>源码</a>
-</div></article>
-<article class="card">
-<div class="card-top"><h3>openai-api-free</h3><span class="date">2023-03-05</span></div>
-<p class="desc">使用openai账号轮询chatgpt的web端接口</p>
-<div class="chips"><span class="chip">Python</span></div>
-<div class="card-links">
-<a class="btn-live" href="https://samge0.github.io/openai-api-free/" target="_blank" rel="noopener">在线访问 <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 1h7v7M11 1 5 7"/></svg></a>
-<a class="btn-src" href="https://github.com/Samge0/openai-api-free" target="_blank" rel="noopener"><svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>源码</a>
-</div></article>
-<article class="card">
-<div class="card-top"><h3>SamgeBotQq</h3><span class="date">2023-02-09</span></div>
-<p class="desc">基于go-Pichubot+gocp+openai+docker，实现基本的消息（好友、群组）接收与自定义回复，方便在qq中使用openai体验chatGPT~</p>
-<div class="chips"><span class="chip">Go</span></div>
-<div class="card-links">
-<a class="btn-live" href="https://samge0.github.io/SamgeBotQq/" target="_blank" rel="noopener">在线访问 <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 1h7v7M11 1 5 7"/></svg></a>
-<a class="btn-src" href="https://github.com/Samge0/SamgeBotQq" target="_blank" rel="noopener"><svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>源码</a>
-</div></article>
-<article class="card">
-<div class="card-top"><h3>SamgeBotWx</h3><span class="date">2023-02-09</span></div>
-<p class="desc">基于openwechat+openai的api+docker，实现基本的消息（好友、群组）接收与自定义回复、公众号消息监听。方便在微信中使用openai体验chatGPT~</p>
-<div class="chips"><span class="chip">Go</span></div>
-<div class="card-links">
-<a class="btn-live" href="https://samge0.github.io/SamgeBotWx/" target="_blank" rel="noopener">在线访问 <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 1h7v7M11 1 5 7"/></svg></a>
-<a class="btn-src" href="https://github.com/Samge0/SamgeBotWx" target="_blank" rel="noopener"><svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>源码</a>
-</div></article>
-</div></section>
-<section aria-label="2022 年项目">
-<div class="year-head"><h2>2022 年</h2><span class="count">1 个项目</span></div>
-<div class="grid">
-<article class="card">
-<div class="card-top"><h3>csb-88ojob</h3><span class="date">2022-09-26</span></div>
-<p class="desc">GitHub Pages 在线站点</p>
-<div class="chips"><span class="chip">HTML</span></div>
-<div class="card-links">
-<a class="btn-live" href="https://samge0.github.io/csb-88ojob/" target="_blank" rel="noopener">在线访问 <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 1h7v7M11 1 5 7"/></svg></a>
-<a class="btn-src" href="https://github.com/Samge0/csb-88ojob" target="_blank" rel="noopener"><svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>源码</a>
-</div></article>
-</div></section>
-<section aria-label="2020 年项目">
-<div class="year-head"><h2>2020 年</h2><span class="count">1 个项目</span></div>
-<div class="grid">
-<article class="card">
-<div class="card-top"><h3>DelBaiDuSnapshot</h3><span class="date">2020-12-31</span></div>
-<p class="desc">半自动提交【删除百度快照】申请的脚本，Cookie需要手动获取替换，验证码识别用的是[图鉴]</p>
-<div class="chips"><span class="chip">Python</span></div>
-<div class="card-links">
-<a class="btn-live" href="https://samge0.github.io/DelBaiDuSnapshot/" target="_blank" rel="noopener">在线访问 <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 1h7v7M11 1 5 7"/></svg></a>
-<a class="btn-src" href="https://github.com/Samge0/DelBaiDuSnapshot" target="_blank" rel="noopener"><svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>源码</a>
-</div></article>
-</div></section>
+
+<header class="topbar">
+  <div class="wrap topbar-inner">
+    <a class="brand" href="#top">
+      <span class="sig"><svg width="14" height="14" viewBox="0 0 32 32"><path d="M9 8l7 16 7-16" stroke="#00d992" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <span class="path">samge<i style="color:var(--mute-2)">@</i><b>agent-lab</b><i style="color:var(--mute-2)">:~$</i></span>
+    </a>
+    <nav class="nav-links">
+      <a href="#works">works</a>
+      <a href="#stack">stack</a>
+      <a href="archive.html">archive</a>
+      <a class="ghost" href="https://github.com/Samge0" target="_blank" rel="noopener">github↗</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+
+<!-- ══ HERO ══ -->
+<section class="hero">
+  <div class="hero-grid-bg"></div>
+  <div class="wrap">
+    <div class="terminal" id="heroTerminal">
+      <div class="terminal-bar">
+        <span class="dots"><i></i><i></i><i></i></span>
+        <span class="title">samge@agent-lab — zsh</span>
+      </div>
+      <div class="terminal-body" id="termBody" aria-label="自我介绍终端动画"></div>
+    </div>
+
+    <aside class="hero-side">
+      <div class="panel">
+        <div class="panel-head"><span>~/activity</span><span class="live-dot"></span></div>
+        <div class="hero-scroll" id="activityFeed"></div>
+      </div>
+      <div class="panel">
+        <div class="panel-head"><span>~/now</span></div>
+        <div class="hero-scroll">
+          <div class="hrow"><span style="color:var(--ink-dim)">岗位方向</span><span>AI Agent 开发</span></div>
+          <div class="hrow"><span style="color:var(--ink-dim)">主场</span><span>Agent 评测 / 工具链</span></div>
+ <div class="hrow"><span style="color:var(--ink-dim)">状态</span><span style="color:var(--accent)">open to work</span></div>
+        </div>
+      </div>
+    </aside>
+
+    <div class="hero-copy">
+      <h1>让 Agent 真正<span style="color:var(--accent)">跑起来</span>的人<span class="dim">。</span></h1>
+      <p>我是 <b>Samge</b>。我在意的是<b>闭环</b>：从对局协议、概率契约到回放站，从记忆系统、双超时降级到研报 PDF——每个 Agent 都被评测过、被量化过、被真实使用过。大多数作品在双卡 2080Ti 工作站上开发，本地 <b>vLLM</b> 与 <b>27B</b> 推理服务支撑日常迭代。</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="#works">查看作品 ↓</a>
+        <a class="btn btn-outline" href="archive.html">archive · 60+ 项目归档</a>
+        <a class="btn btn-outline" href="https://github.com/Samge0" target="_blank" rel="noopener">github↗</a>
+      </div>
+      <div class="hero-meta">
+        <span><b>2023–2026</b> 持续构建</span>
+        <span><b>60+</b> 原创仓库</span>
+        <span><b>★535</b> 最高星项目</span>
+        <span><b>7</b> 国用户使用</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ WORKS ══ -->
+<section class="sec" id="works">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="idx">01</span>
+      <h2>Selected Works</h2>
+      <span class="line"></span>
+      <a class="more" href="archive.html">全部归档 →</a>
+    </div>
+    <div id="worksList"><!-- featured works injected --></div>
+  </div>
+</section>
+
+<!-- ══ STACK ══ -->
+<section class="sec" id="stack" style="padding-top:20px">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="idx">02</span>
+      <h2>Working Stack</h2>
+      <span class="line"></span>
+    </div>
+    <div class="stack-grid">
+      <div class="stack-cell"><h4>AGENT CORE</h4><p><code>LangGraph</code> <code>AgentScope</code> 多智能体编排；概率契约（argmax / sum=1）与<b style="color:var(--ink-dim)">决策评测协议</b>设计。</p></div>
+      <div class="stack-cell"><h4>LLM INFERENCE</h4><p><code>vLLM</code> 双 Turing GPU 部署 9B/27B 服务；量化（GPTQ-int4 / GGUF / 三值 Bonsai）； GGUF 格式与 ComfyUI-GGUF 兼容性工程。</p></div>
+      <div class="stack-cell"><h4>TOOLING &amp; MCP</h4><p><code>MCP</code> 服务器（QQ音乐 / Pixelle-Video）；Cordis 插件体系；浏览器自动化 <code>Playwright</code>。</p></div>
+      <div class="stack-cell"><h4>PRODUCT UI</h4><p>Electron / VS Code 扩展 / 纯静态站点；Apple Design System、VoltAgent 暗色终端风、多邻国式交互。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ ARCHIVE TEASER ══ -->
+<section class="sec" style="padding-top:20px">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="idx">03</span>
+      <h2>Everything Else</h2>
+      <span class="line"></span>
+      <a class="more" href="archive.html">进入 archive →</a>
+    </div>
+    <div class="archive-teaser">
+      <a class="at-cell" href="archive.html">
+        <span class="k">~/archive/online</span>
+        <span class="n">61</span>
+        <span class="d">在线小作品 — MCP 服务器、爬虫自动化、CV 检测、桌面客户端</span>
+      </a>
+      <a class="at-cell" href="archive.html#forks">
+        <span class="ish k">~/archive/forks</span>
+        <span class="n">33</span>
+        <span class="d">Forks — 学习与研究用途的参考仓库</span>
+      </a>
+    </div>
+  </div>
+</section>
+
 </main>
-<section class="about wrap" id="about"><div class="about-card">
-<h2>关于本站</h2>
-<p>数据来自 GitHub API（公开仓库 · has_pages=true），按仓库创建时间降序排列，每个站点均经过 HTTP 存活校验。页面为单文件 HTML，无外部依赖。</p>
-<div class="about-links">
-<a class="btn btn-ghost" href="https://github.com/Samge0" target="_blank" rel="noopener"><svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>GitHub 主页</a>
-<a class="btn btn-ghost" href="https://samge0.github.io" target="_blank" rel="noopener">个人站</a>
-</div></div></section>
-<footer class="footer"><div class="wrap">© 2026 Samge0 · 数据来自 GitHub API · 按<a href="#top">创建时间降序</a>展示</div></footer>
-</body></html>
+
+<footer>
+  <div class="wrap foot-inner">
+    <span>samge@agent-lab · built with 0 frameworks · <a href="https://github.com/Samge0/app-home">source↗</a></span>
+    <span>© 2026 Samge · design: terminal-minimal</span>
+  </div>
+</footer>
+
+<script src="projects-data.js"></script>
+<script>
+/* ── hero terminal typing ── */
+(function(){
+  const LINES = [
+    {type:"cmd", text:"whoami"},
+    {type:"out", html:'<span style="color:var(--ink)">Samge</span> — AI Agent 工程师 · 全栈'},
+    {type:"cmd", text:"cat focus.txt"},
+    {type:"out", html:'<span style="color:var(--ink-dim)">agent 评测 · 决策模型 · 工具链 · 桌面 Agent</span>'},
+    {type:"cmd", text:"ls ~/works | head -5"},
+    {type:"out", html:'jev-arena/  booster-match-runner/  BizOwl/  report-sage/  ragflow-upload/'},
+    {type:"cmd", text:"uptime"},
+    {type:"out", html:'<span style="color:var(--accent)">6 年</span> 持续构建 · <span style="color:var(--accent)">60+</span> 原创仓库 · 双 2080Ti 工作站在线'},
+  ];
+  const body = document.getElementById('termBody');
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduce) {
+    body.innerHTML = LINES.map(l => `<div>${l.type==='cmd' ? '<span class="prompt">'+l.text+'</span>' : l.html}</div>`).join('') + '<div><span class="prompt">_</span><span class="cursor"></span></div>';
+    return;
+  }
+  let li = 0;
+  function typeCmd(cmd, done){
+    const row = document.createElement('div'); row.className='t-line';
+    const p = document.createElement('span'); p.className='prompt';
+    const cur = document.createElement('span'); cur.className='cursor';
+    row.appendChild(p); row.appendChild(cur);
+    body.appendChild(row);
+    let i = 0;
+    (function tick(){
+      if (i <= cmd.length){ p.textContent = cmd.slice(0,i); i++; setTimeout(tick, 34 + Math.random()*40); }
+      else { cur.remove(); done(); }
+    })();
+  }
+  function printOut(html, done){
+    const row = document.createElement('div'); row.className='t-line'; row.innerHTML = html;
+    body.appendChild(row);
+    setTimeout(done, 260);
+  }
+  (function next(){
+    if (li >= LINES.length){ body.insertAdjacentHTML('beforeend','<div class="t-line"><span class="prompt">_</span><span class="cursor"></span></div>'); return; }
+    const l = LINES[li++];
+    if (l.type==='cmd') typeCmd(l.text, next); else printOut(l.html, next);
+  })();
+})();
+
+/* ── activity feed (static, recent-first) ── */
+(function(){
+  const feed = [
+    ["09-20","BiTrans 双语翻译 App (Kotlin)"],
+    ["09-19","booster-match-runner 3v3 跑批优化"],
+    ["09-15","funny-pets 上线自定义域"],
+    ["09-11","wzyp-view 数据洞察站"],
+    ["09-06","AgentInterview 学习工具 v2"],
+  ];
+  document.getElementById('activityFeed').innerHTML = feed.map(f =>
+    `<div class="hrow"><a href="archive.html">${f[1]}</a><span class="h-date">${f[0]}</span></div>`).join('');
+})();
+
+/* ── featured works render ── */
+(function(){
+  const T = window.PROJECTS.FEATURED;
+  const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');
+
+  const stages = {
+    'jev-arena': () => `
+      <div class="stage" data-stage="arena">
+        <div class="stage-head"><span>tetris · seed=42</span><span class="live-dot"></span></div>
+        <div class="stage-body">
+          <div class="arena-board" id="arenaBoard"></div>
+          <div class="prob-bars">
+            <div class="prob-row"><span>col 0</span><span class="bar"><i style="--w:12%"></i></span><span class="val">.12</span></div>
+            <div class="prob-row"><span>col 2</span><span class="bar"><i style="--w:64%"></i></span><span class="val">.64</span></div>
+            <div class="prob-row"><span>col 3</span><span class="bar"><i style="--w:21%"></i></span><span class="val">.21</span></div>
+            <div class="prob-row"><span>col 5</span><span class="bar"><i style="--w:03%"></i></span><span class="val">.03</span></div>
+          </div>
+        </div>
+        <div class="stage-foot"><span>choice=argmax(col 2)</span><span>Σp=1.00 ✓</span></div>
+      </div>`,
+    'booster-match-runner': () => `
+      <div class="stage" data-stage="booster">
+        <div class="stage-head"><span>3v3 · booster sim</span><span class="live-dot"></span></div>
+        <div class="stage-body">
+          <div class="scoreboard"><span class="team" style="color:#e0604c">RED agent</span><span class="score" id="scR">0</span><span class="colon">:</span><span class="score" id="scB">0</span><span class="team" style="color:#3f7bd9">BLUE agent</span><span class="clock" id="scClock">00:00</span></div>
+          <div class="pitch" id="bPitch">
+            <div class="mid"></div><div class="circle"></div>
+            <div class="goal-glow"></div><div class="goal-glow r"></div>
+          </div>
+          <div class="tl-events" id="bEvents"></div>
+        </div>
+        <div class="stage-foot"><span>events.jsonl 增量读取</span><span>poll 3s</span></div>
+      </div>`,
+    'BizOwl': () => `
+      <div class="stage" data-stage="bizowl">
+        <div class="stage-head"><span>bizowl · chat + memory</span><span class="live-dot"></span></div>
+        <div class="stage-body">
+          <div class="chatbox" id="owlChat">
+            <div class="msg user">帮我查一下这家公司的股权结构</div>
+            <div class="msg ai"><span class="typing"><i></i><i></i><i></i></span></div>
+          </div>
+          <div class="mem-registry" id="owlMem"></div>
+        </div>
+        <div class="stage-foot"><span>memories: 懒加载 · 空闲压缩</span><span>USER.md</span></div>
+      </div>`,
+    'hermes-research-report-agent': () => `
+      <div class="stage" data-stage="sage">
+        <div class="stage-head"><span>report-sage · pipeline</span><span class="live-dot"></span></div>
+        <div class="stage-body">
+          <div class="pipeline" id="sagePipe">
+            <span class="pnode">采集</span><span class="parrow"></span>
+            <span class="pnode">多维打分</span><span class="parrow"></span>
+            <span class="pnode">加权汇总</span><span class="parrow"></span>
+            <span class="pnode on">PDF</span>
+          </div>
+          <div class="score-list">
+            <div class="score-row"><span class="name">技术成熟度</span><span class="bar"><i style="--w:78%"></i></span><span class="val">7.8</span></div>
+            <div class="score-row"><span class="name">市场规模</span><span class="bar"><i style=" --w:64%"></i></span><span class="val">6.4</span></div>
+            <div class="score-row"><span class="name">供应链风险</span><span class="bar"><i style="--w:41%"></i></span><span class="val">4.1</span></div>
+          </div>
+        </div>
+        <div class="stage-foot"><span>headless chrome 渲染</span><span>评分依据可追溯</span></div>
+      </div>`,
+    'ragflow-upload': () => `
+      <div class="stage" data-stage="ragflow">
+        <div class="stage-head"><span>ragflow-upload · queue</span><span class="live-dot"></span></div>
+        <div class="stage-body">
+          <div class="fileq">
+            <div class="frow done"><span>✓</span><span class="fname">备忘录_2024.md</span><span class="pbar"><i></i></span><span class="st">parsed</span></div>
+            <div class="frow"><span>…</span><span class="fname">研报_固态电池.pdf</span><span class="pbar"><i style="--w:72%"></i></span><span class="st">parsing</span></div>
+            <div class="frow"><span>·</span><span class="fname">会议纪要_0902.docx</span><span class="pbar"><i style="--w:0%"></i></span><span class="st">queued</span></div>
+            <div class="frow"><span>·</span><span class="fname">周报合集/</span><span class="st" style="grid-column:3">dir · 12 files</span></div>
+          </div>
+        </div>
+        <div class="stage-foot"><span>断点续传 · 跳过已完成</span><span>★ 535</span></div>
+      </div>`,
+  };
+
+  const railKinds = ['agent-eval','agent-vs-agent','desktop-agent','profile-dist','rag-tool'];
+
+  document.getElementById('worksList').innerHTML = T.map((w,i) => `
+    <article class="work" id="w-${w.id}">
+      <div class="work-rail">
+        <span class="no">${String(i+1).padStart(2,'0')}</span>
+        <span class="kind">${railKinds[i] || w.tags[0]}</span>
+      </div>
+      <div class="work-main">
+        <div class="work-head">
+          <h3><a href="${w.repo}" target="_blank" rel="noopener">${esc(w.title)}</a></h3>
+          <span class="sub">${esc(w.subtitle)}</span>
+          <span class="period">${esc(w.period)}</span>
+        </div>
+        <div class="work-tags">${w.tags.map(t=>`<span class="wtag">${esc(t)}</span>`).join('')}</div>
+        <div class="work-desc">
+          <div>
+            <p class="summary">${esc(w.summary)}</p>
+            <div class="story">${w.story.map(s=>`<p>${esc(s)}</p>`).join('')}</div>
+          </div>
+          <div class="work-visual">${(stages[w.id]||(()=>'' ))()}</div>
+        </div>
+        <div class="work-facts">${w.facts.map(f=>`<div class="wfact"><span class="k">${esc(f[0])}</span><span class="v">${esc(f[1])}</span></div>`).join('')}</div>
+        <div class="work-links">${w.links.map(l=>`<a href="${l.href}" target="_blank" rel="noopener">${esc(l.label)}</a>`).join('')}</div>
+      </div>
+    </article>`).join('');
+
+  /* ── stage animations (IntersectionObserver) ── */
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // jev-arena board
+  const board = document.getElementById('arenaBoard');
+  if (board){
+    const pattern = [
+      "001100","011110","001100","000000","110011","011110","001100","000000",
+    ];
+    const falling = [2,3]; // hi cells
+    board.innerHTML = pattern.flatMap((row,ri) => row.split('').map((c,ci) => {
+      const on = c==='1';
+      const hi = ri===0 && (ci===2||ci===3);
+      return `<span class="arena-cell${on?' on':''}${hi?' hi':''}"></span>`;
+    })).join('');
+  }
+  // booster timeline
+  const events = [
+    ["00:12","r","定位球"],
+    ["00:31","b","进球! 1-0"],
+    ["00:58","r","犯规"],
+    ["01:22","b","进球! 2-0"],
+  ];
+  const evBox = document.getElementById('bEvents');
+  if (evBox && !reduce){
+    let i = 0;
+    const timer = setInterval(()=>{
+      if (i>=events.length){ clearInterval(timer); return; }
+      const [t,who,txt] = events[i++];
+      const el = document.createElement('div');
+      el.className = 'tl-ev' + (txt.includes('进球')?' goal':'');
+      el.innerHTML = `<span class="t">${t}</span><span class="who ${who}">${who==='r'?'RED':'BLUE'}</span><span class="txt">${txt}</span>`;
+      evBox.appendChild(el);
+      if (txt.includes('进球')){
+        const isB = who==='b';
+        const el2 = isB ? document.getElementById('scB') : document.getElementById('scR');
+        el2.textContent = String(parseInt(el2.textContent)+1);
+      }
+    }, 1400);
+  } else if (evBox){
+    evBox.innerHTML = events.map(([t,who,txt])=>`<div class="tl-ev"><span class="t">${t}</span><span class="who ${who}">${who==='r'?'RED':'BLUE'}</span><span class="txt">${txt}</span></div>`).join('');
+  }
+  // booster pitch robots
+  const pitch = document.getElementById('bPitch');
+  if (pitch){
+    pitch.insertAdjacentHTML('beforeend',
+      '<span class="robot r" style="left:18%;top:22%"></span><span class="robot r" style="left:26%;top:52%"></span><span class="robot r" style="left:20%;top:78%"></span>' +
+      '<span class="robot b" style="left:74%;top:30%"></span><span class="robot b" style="left:80%;top:58%"></span><span class="robot b" style="left:70%;top:80%"></span>' +
+      '<span class="ball" style="left:49%;top:47%"></span>');
+    if (!reduce){
+      // ball drift + robot shuffle on loop
+      const ball = pitch.querySelector('.ball');
+      const robots = pitch.querySelectorAll('.robot');
+      let t = 0;
+      setInterval(()=>{
+        t++;
+        ball.style.transform = `translate(${Math.sin(t*.7)*30 + 40}px, ${Math.cos(t*.9)*18}px)`;
+        robots.forEach((r,i)=>{ r.style.transform = `translate(${Math.sin(t*.5+i)*14}px, ${Math.cos(t*.4+i*2)*10}px)`; });
+      }, 1500);
+    }
+  }
+  // bizowl chat + memory
+  const owlChat = document.getElementById('owlChat');
+  const owlMem = document.getElementById('owlMem');
+  if (owlChat && !reduce){
+    const reply = '已生成股权穿透报告（3 层），导出 PDF 已注册。';
+    setTimeout(()=>{
+      const ai = owlChat.querySelector('.msg.ai');
+      ai.innerHTML = reply;
+      if (owlMem){
+        const chips = ['偏好:PDF导出','工具:qcc_search','记忆块#12压缩'];
+        chips.forEach((c,i)=>setTimeout(()=>{
+          const el = document.createElement('span'); el.className='mem-chip'; el.textContent=c;
+          owlMem.appendChild(el);
+        }, 500 + i*420));
+      }
+    }, 2200);
+  }
+  // sage pipeline steps
+  const pipe = document.getElementById('sagePipe');
+  if (pipe && !reduce){
+    const nodes = pipe.querySelectorAll('.pnode');
+    let cur = 0;
+    setInterval(()=>{
+      nodes.forEach((n,i)=>n.classList.toggle('on', i===cur));
+      cur = (cur+1) % nodes.length;
+    }, 1100);
+  }
+  // ragflow progress
+  // (CSS handles via .work.in)
+
+  /* reveal on scroll: add .in to .work */
+  const io = new IntersectionObserver(es=>{
+    es.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('in'); });
+  },{threshold:.25});
+  document.querySelectorAll('.work').forEach(w=>io.observe(w));
+})();
+</script>
+</body>
+</html>

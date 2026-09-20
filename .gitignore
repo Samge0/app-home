@@ -9,3 +9,6 @@ assemble_prompt.py
 portfolio.md
 prompt.txt
 stderr.txt
+
+.shots/
+.verify/

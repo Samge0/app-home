@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Archive · Samge</title>
+<meta name="description" content="Samge 的作品归档：61 个在线项目 + 33 个学习参考 fork，支持搜索与分类过滤。">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23101010'/%3E%3Cpath d='M9 8l7 16 7-16' stroke='%2300d992' stroke-width='2.6' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<style>
+:root{
+  --canvas:#101010; --canvas-2:#161615; --surface:#1a1a19; --surface-2:#202020;
+  --ink:#f2f2f2; --ink-dim:#d6d6d2; --body:#bdbdbd; --mute:#8b949e; --mute-2:#6b7280;
+  --accent:#00d992; --accent-soft:#2fd6a1; --accent-dim:rgba(0,217,146,.14);
+  --hairline:#2a2a28; --hairline-2:#222220;
+  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;
+  --sans:system-ui,-apple-system,"Segoe UI","PingFang SC","Noto Sans SC","Microsoft YaHei",sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--canvas);color:var(--body);font-family:var(--sans);line-height:1.7;-webkit-font-smoothing:antialiased}
+::selection{background:rgba(0,217,146,.25);color:#fff}
+a{color:var(--accent);text-decoration:none}
+.wrap{max-width:1080px;margin:0 auto;padding:0 28px}
+.topbar{position:sticky;top:0;z-index:60;background:rgba(16,16,16,.88);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border-bottom:1px solid var(--hairline-2)}
+.topbar-inner{display:flex;align-items:center;justify-content:space-between;height:56px}
+.brand{display:flex;align-items:center;gap:10px;font-family:var(--mono);font-size:.92rem;color:var(--ink)}
+.brand .path b{color:var(--ink);font-weight:600}
+.nav-links{display:flex;gap:4px;align-items:center}
+.nav-links a{font-size:.82rem;color:var(--mute);padding:6px 12px;border-radius:6px;transition:all .15s}
+.nav-links a:hover{color:var(--ink);background:var(--surface-2)}
+.nav-links a.ghost{border:1px solid var(--hairline);color:var(--ink-dim);font-weight:600}
+.nav-links a.ghost:hover{border-color:var(--accent);color:var(--accent)}
+/* head */
+.pagehead{padding:72px 0 36px}
+.crumbs{font-family:var(--mono);font-size:.76rem;color:var(--mute-2);margin-bottom:14px}
+.crumbs a{color:var(--mute)}
+.crumbs a:hover{color:var(--accent)}
+h1{font-size:clamp(1.6rem,3.4vw,2.2rem);font-weight:700;color:var(--ink);letter-spacing:-.01em}
+.lede{margin-top:10px;color:var(--mute);max-width:64ch;font-size:.95rem}
+/* filter bar */
+.filterbar{display:flex;gap:14px;flex-wrap:wrap;align-items:center;padding:18px 0 6px;border-top:1px solid var(--hairline-2)}
+.search{flex:1;min-width:220px;display:flex;align-items:center;gap:10px;background:var(--canvas-2);border:1px solid var(--hairline);border-radius:8px;padding:9px 14px}
+.search:focus-within{border-color:var(--accent)}
+.search svg{flex-shrink:0;opacity:.5}
+.search input{flex:1;background:none;border:none;outline:none;color:var(--ink);font-family:var(--mono);font-size:.86rem}
+.search input::placeholder{color:var(--mute-2)}
+.cats{display:flex;gap:6px;flex-wrap:wrap}
+.cat{font-family:var(--mono);font-size:.76rem;color:var(--mute);border:1px solid var(--hairline);border-radius:999px;padding:5px 14px;cursor:pointer;transition:all .15s;background:none}
+.cat:hover{color:var(--ink-dim);border-color:#3a3a38}
+.cat.on{color:var(--accent);border-color:rgba(0,217,146,.4);background:var(--accent-dim)}
+.result-meta{font-family:var(--mono);font-size:.72rem;color:var(--mute-2);padding:14px 0 18px}
+/* table */
+.ptable{border:1px solid var(--hairline-2);border-radius:10px;overflow:hidden}
+.prow{display:grid;grid-template-columns:150px 64px 1fr 84px;gap:16px;align-items:baseline;padding:15px 20px;border-bottom:1px solid var(--hairline-2);transition:background .15s}
+.prow:last-child{border-bottom:none}
+.prow:hover{background:var(--canvas-2)}
+.prow .pname{font-family:var(--mono);font-size:.86rem;color:var(--ink-dim);word-break:break-all}
+.prow .pname a{color:inherit}
+.prow .pname a:hover{color:var(--accent)}
+.prow .plang{font-family:var(--mono);font-size:.68rem;color:var(--mute-2)}
+.prow .pdesc{font-size:.84rem;color:var(--body)}
+.prow .pdate{font-family:var(--mono);font-size:.7rem;color:var(--mute-2);text-align:right}
+.prow.is-agent .pname::before{content:"●";color:var(--accent);font-size:.5rem;margin-right:7px;vertical-align:2px}
+@media(max-width:760px){
+  .prow{grid-template-columns:1fr auto;row-gap:4px}
+  .prow .plang{order:3}
+  .prow .pdesc{grid-column:1/-1}
+  .prow .pdate{grid-row:1;grid-column:2}
+  .prow .pname{grid-column:1}
+}
+/* forks */
+#forks{padding:64px 0 20px}
+.fork-head{display:flex;align-items:baseline;gap:14px;margin-bottom:8px}
+.fork-head h2{font-size:1.15rem;font-weight:700;color:var(--ink-dim)}
+.fork-head .n{font-family:var(--mono);font-size:.72rem;color:var(--mute-2)}
+.fork-note{font-size:.8rem;color:var(--mute-2);margin-bottom:18px}
+.fork-cloud{display:flex;flex-wrap:wrap;gap:8px}
+.fchip{font-family:var(--mono);font-size:.76rem;color:var(--mute);border:1px dashed var(--hairline);border-radius:7px;padding:5px 12px;transition:all .15s}
+.fchip:hover{color:var(--ink-dim);border-color:#3a3a38}
+.fchip i{font-style:normal;color:var(--mute-2);font-size:.68rem;margin-left:6px}
+footer{border-top:1px solid var(--hairline-2);padding:36px 0 48px;margin-top:56px}
+.foot-inner{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;font-family:var(--mono);font-size:.74rem;color:var(--mute-2)}
+.foot-inner a{color:var(--mute)}
+.foot-inner a:hover{color:var(--accent)}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="wrap topbar-inner">
+    <a class="brand" href="index.html">
+      <span class="path">samge<i style="color:var(--mute-2)">@</i><b>agent-lab</b><i style="color:var(--mute-2)">:~$</i></span>
+    </a>
+    <nav class="nav-links">
+      <a href="index.html#works">works</a>
+      <a href="index.html#stack">stack</a>
+      <a href="archive.html">archive</a>
+      <a class="ghost" href="https://github.com/Samge0" target="_blank" rel="noopener">github↗</a>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="pagehead">
+    <div class="crumbs"><a href="index.html">~/</a> &gt; archive</div>
+    <h1>Archive<span style="color:var(--mute-2)">.</span></h1>
+    <p class="lede">全部长期构建的作品都在这里——按主题分类，可搜索。★标记的是与 Agent 直接相关的项目。再往下是学习与研究用途的 fork 参考。</p>
+  </div>
+
+  <div class="filterbar">
+    <div class="search">
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="7" cy="7" r="5"/><path d="M11 11l4 4"/></svg>
+      <input id="q" type="text" placeholder="grep -i … 搜索名称或描述" autocomplete="off">
+    </div>
+    <div class="cats" id="cats">
+      <button class="cat on" data-cat="all">all</button>
+      <button class="cat" data-cat="agent">agent</button>
+      <button class="cat" data-cat="tool">tools</button>
+      <button class="cat" data-cat="app">apps</button>
+      <button class="cat" data-cat="ai">ai/cv</button>
+    </div>
+  </div>
+  <div class="result-meta" id="resultMeta"></div>
+  <div class="ptable" id="ptable"></div>
+
+  <section id="forks">
+    <div class="fork-head"><h2>forks</h2><span class="n">// 学习参考 · 非原创</span></div>
+    <p class="fork-note">跟随 upstream 的学习与研究仓库，偶尔提 PR。不作为作品展示，仅作完整性归档。</p>
+    <div class="fork-cloud" id="forkCloud"></div>
+  </section>
+</div>
+
+<footer>
+  <div class="wrap foot-inner">
+    <span>samge@agent-lab · <a href="index.html">← back to home</a></span>
+    <span>© 2026 Samge</span>
+  </div>
+</footer>
+
+<script src="projects-data.js"></script>
+<script>
+(function(){
+  const ONLINE = window.PROJECTS.ONLINE;
+  const FORKS = window.PROJECTS.FORKS;
+  const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');
+  const CAT_CN = {agent:'agent', tool:'tool', app:'app', ai:'ai/cv'};
+
+  const table = document.getElementById('ptable');
+  const meta = document.getElementById('resultMeta');
+  const q = document.getElementById('q');
+  let curCat = 'all';
+
+  function render(){
+    const kw = q.value.trim().toLowerCase();
+    const rows = ONLINE.filter(p =>
+      (curCat === 'all' || p.cat === curCat || p.cat2 === curCat) &&
+      (!kw || p.name.toLowerCase().includes(kw) || (p.desc||'').toLowerCase().includes(kw))
+    );
+    table.innerHTML = rows.length ? rows.map(p => `
+      <div class="prow ${p.cat==='agent'?'is-agent':''}">
+        <span class="pname"><a href="${p.url}" target="_blank" rel="noopener">${esc(p.name)}</a></span>
+        <span class="plang">${esc(p.lang||'')}</span>
+        <span class="pdesc">${esc(p.desc||'')}</span>
+        <span class="pdate">${esc(p.date||'')}</span>
+      </div>`).join('')
+      : '<div style="padding:32px;text-align:center;color:var(--mute-2);font-family:var(--mono);font-size:.82rem">no match — 试试更短的关键词</div>';
+    meta.textContent = `// ${rows.length} / ${ONLINE.length} items · cat=${curCat}${q.value.trim() ? ' · q="' + q.value.trim() + '"' : ''}`;
+  }
+  q.addEventListener('input', render);
+  document.getElementById('cats').addEventListener('click', e => {
+    const b = e.target.closest('.cat'); if (!b) return;
+    document.querySelectorAll('.cat').forEach(c => c.classList.toggle('on', c === b));
+    curCat = b.dataset.cat;
+    render();
+  });
+  render();
+
+  document.getElementById('forkCloud').innerHTML = FORKS.map(f =>
+    `<a class="fchip" href="${f.url}" target="_blank" rel="noopener">${esc(f.name)}<i>${esc(f.desc)}</i></a>`
+  ).join('');
+})();
+</script>
+</body>
+</html>

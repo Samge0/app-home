@@ -1,18 +1,22 @@
-# app-home · Samge0 作品集
+# app-home
 
-个人 GitHub Pages 作品集落地页：汇总所有配置了 GitHub Pages 的公开仓库，按创建时间降序展示。
+Samge 的个人主页 —— AI Agent 工程实践展示。
 
-## 在线预览
+## 结构
 
-- 作品集主页：<https://samge0.github.io/app-home/>
-- GitHub 主页：<https://github.com/Samge0>
+- `index.html` — 主页：终端 hero + 5 个代表作（各带项目风味的动效面板）+ 工作栈
+- `archive.html` — 归档页：61 个在线项目（搜索 / 分类过滤）+ 33 个学习参考 fork
+- `projects-data.js` — 作品数据（单文件，好维护）
 
-## 说明
+## 设计
 
-- 数据来源：GitHub API（`users/Samge0/repos`，`has_pages=true`），共 55 个在线项目，全部经存活校验（HTTP 200）
-- 页面由 [html-anything](https://github.com/) 生成：SaaS Landing 模板，单文件 HTML（Tailwind CDN + Google Fonts），无构建步骤
-- 部署：GitHub Actions（`.github/workflows/pages.yml`），push 到 main 自动发布
+暗色终端美学（inspired by [VoltAgent DESIGN.md](https://github.com/VoltAgent/awesome-design-md)）：
+虚空黑画布 `#101010` + 电光绿单强调 `#00d992` + mono 排印。
+每个代表作的展示面板都提取自项目本身的元素——jev-arena 的概率分布条、
+booster 的球场与事件时间线、BizOwl 的对话与记忆块、Report Sage 的流水线与评分、
+ragflow-upload 的上传队列。
 
-## 更新数据
+## 维护
 
-项目数据在 `index.html` 内为静态内容。仓库或 Pages 站点变化时，重新运行收集脚本并重新生成页面即可。
+数据都在 `projects-data.js`：`FEATURED`（首页代表作）、`ONLINE`（归档在线项目）、
+`FORKS`（fork 列表）。改完 push main 即自动部署（`.github/workflows/pages.yml`）。
