@@ -139,6 +139,31 @@ kbd,code{font-family:var(--mono)}
 .prob-row .bar i{position:absolute;inset:0;right:auto;background:var(--accent);width:0;transition:width .9s cubic-bezier(.2,.7,.2,1)}
 .work.in .prob-row .bar i{width:var(--w)}
 .prob-row .val{color:var(--ink-dim);text-align:right}
+
+/* qanvas: canvas grid + gen stages */
+.qanvas-stage{display:grid;grid-template-columns:repeat(3,1fr);grid-auto-rows:34px;gap:3px;margin-bottom:12px}
+.qcell{background:var(--surface-2);border-radius:3px;opacity:.5;transition:opacity .5s,background .5s}
+.qcell.lit{background:#8b7ff0;opacity:1;box-shadow:0 0 8px rgba(139,127,240,.35)}
+.qcell.lit2{background:#b84ee0;opacity:.9}
+.qstages{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.qstage{font-family:var(--mono);font-size:.62rem;color:var(--mute);border:1px solid var(--hairline);border-radius:4px;padding:2px 8px;transition:all .3s}
+.qstage.on{color:#b9aef5;border-color:rgba(139,127,240,.5);background:rgba(139,127,240,.12)}
+.qbadge{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:.64rem;color:#b9aef5;margin-top:12px;border:1px dashed rgba(139,127,240,.4);border-radius:6px;padding:4px 10px}
+.qbadge .rgba-sw{display:inline-block;width:10px;height:10px;border-radius:2px;background:linear-gradient(45deg,#8b7ff0 50%,transparent 50%);border:1px solid rgba(139,127,240,.5)}
+/* bitrans: waveform + caption stream */
+.wave{display:flex;align-items:flex-end;gap:3px;height:44px;margin-bottom:12px}
+.wave i{flex:1;background:linear-gradient(180deg,#cc785c,#a9583e);border-radius:2px;min-height:4px;animation:wv 1.3s ease-in-out infinite;opacity:.85}
+@keyframes wv{0%,100%{height:18%}50%{height:82%}}
+.caption-stream{display:flex;flex-direction:column;gap:8px}
+.cap{display:flex;flex-direction:column;gap:1px;border-left:2px solid #cc785c;padding:2px 0 2px 10px}
+.cap.l2{border-left-color:#5db8a6}
+.cap .src{font-size:.76rem;color:var(--ink-dim)}
+.cap.l2 .src{color:#5db8a6}
+.cap .dst{font-family:var(--mono);font-size:.68rem;color:var(--mute)}
+.cap{opacity:0;transform:translateX(-6px);transition:all .5s}
+.cap.show{opacity:1;transform:none}
+.vad-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:#5db8a6;margin-right:6px;animation:pulse 1.6s infinite}
+
 /* booster: soccer pitch + timeline */
 .pitch{position:relative;height:150px;background:
   repeating-linear-gradient(90deg,transparent 0 24px,rgba(255,255,255,.025) 24px 25px);
@@ -283,26 +308,27 @@ footer{border-top:1px solid var(--hairline-2);padding:44px 0 56px;margin-top:40p
       <div class="panel">
         <div class="panel-head"><span>~/now</span></div>
         <div class="hero-scroll">
-          <div class="hrow"><span style="color:var(--ink-dim)">岗位方向</span><span>AI Agent 开发</span></div>
-          <div class="hrow"><span style="color:var(--ink-dim)">主场</span><span>Agent 评测 / 工具链</span></div>
+          <div class="hrow"><span style="color:var(--ink-dim)">方向</span><span>AI 应用 / Agent 开发</span></div>
+          <div class="hrow"><span style="color:var(--ink-dim)">特长</span><span>Agent 协同开发 · 单日 MVP</span></div>
  <div class="hrow"><span style="color:var(--ink-dim)">状态</span><span style="color:var(--accent)">open to work</span></div>
         </div>
       </div>
     </aside>
 
     <div class="hero-copy">
-      <h1>让 Agent 真正<span style="color:var(--accent)">跑起来</span>的人<span class="dim">。</span></h1>
-      <p>我是 <b>Samge</b>。我在意的是<b>闭环</b>：从对局协议、概率契约到回放站，从记忆系统、双超时降级到研报 PDF——每个 Agent 都被评测过、被量化过、被真实使用过。大多数作品在双卡 2080Ti 工作站上开发，本地 <b>vLLM</b> 与 <b>27B</b> 推理服务支撑日常迭代。</p>
+      <h1>10 年工程，近 3 年 all-in <span style="color:var(--accent)">LLM / Agent</span><span class="dim">。</span></h1>
+      <p>我是 <b>Samge</b>。从 Android、数据采集到内网 AI 基础设施，再到 <b>模型部署 → RAG → Agent → 应用落地</b>的完整实践：为公司从 0 搭建 LLM 基础设施服务两年，逆向重构商业 Agent 应用，多个 MVP <b>单日从 0 到 1</b>。日常用 Agent Coding 协同开发——我负责架构与验收，Agent 负责编码与迭代。</p>
       <div class="hero-actions">
         <a class="btn btn-primary" href="#works">查看作品 ↓</a>
         <a class="btn btn-outline" href="archive.html">archive · 60+ 项目归档</a>
         <a class="btn btn-outline" href="https://github.com/Samge0" target="_blank" rel="noopener">github↗</a>
+        <a class="btn btn-outline" href="mailto:samge720@gmail.com">samge720@gmail.com</a>
       </div>
       <div class="hero-meta">
-        <span><b>2023–2026</b> 持续构建</span>
+        <span><b>10 年</b>工程开发</span>
         <span><b>60+</b> 原创仓库</span>
-        <span><b>★535</b> 最高星项目</span>
-        <span><b>7</b> 国用户使用</span>
+        <span><b>535+</b> Stars · 维护 2 年</span>
+        <span><b>单日</b> 0→1 MVP ×2</span>
       </div>
     </div>
   </div>
@@ -330,10 +356,10 @@ footer{border-top:1px solid var(--hairline-2);padding:44px 0 56px;margin-top:40p
       <span class="line"></span>
     </div>
     <div class="stack-grid">
-      <div class="stack-cell"><h4>AGENT CORE</h4><p><code>LangGraph</code> <code>AgentScope</code> 多智能体编排；概率契约（argmax / sum=1）与<b style="color:var(--ink-dim)">决策评测协议</b>设计。</p></div>
-      <div class="stack-cell"><h4>LLM INFERENCE</h4><p><code>vLLM</code> 双 Turing GPU 部署 9B/27B 服务；量化（GPTQ-int4 / GGUF / 三值 Bonsai）； GGUF 格式与 ComfyUI-GGUF 兼容性工程。</p></div>
-      <div class="stack-cell"><h4>TOOLING &amp; MCP</h4><p><code>MCP</code> 服务器（QQ音乐 / Pixelle-Video）；Cordis 插件体系；浏览器自动化 <code>Playwright</code>。</p></div>
-      <div class="stack-cell"><h4>PRODUCT UI</h4><p>Electron / VS Code 扩展 / 纯静态站点；Apple Design System、VoltAgent 暗色终端风、多邻国式交互。</p></div>
+      <div class="stack-cell"><h4>AGENT 开发</h4><p><code>Function Calling</code> · Agent Loop · 工具调用 · Prompt 管线 · 状态管理 · Human-in-the-loop；<code>LangChain</code> / <code>LangGraph</code> 状态机与记忆；LLM 应用安全（Prompt Injection / 路径访问审计）。</p></div>
+      <div class="stack-cell"><h4>本地 LLM / 基础设施</h4><p><code>vLLM</code> 部署 Qwen / DeepSeek，多 GPU 与量化配置；<code>OneAPI</code> 统一网关模型解耦；<code>Dify</code> 私有化；RAG 全链路（Embedding / Reranker / <code>Milvus</code>）。</p></div>
+      <div class="stack-cell"><h4>AI-NATIVE 开发</h4><p>日常以 Hermes / Claude Code 等 Agent Coding 工具开发：<b style="color:var(--ink-dim)">想法 → 研究 → Agent 执行 → 验收 → 迭代</b>，多次单日 0→1。</p></div>
+      <div class="stack-cell"><h4>工程基础</h4><p>Python / FastAPI / JavaScript / Kotlin / Go / Android；Docker / Linux；复杂爬虫与协议逆向；信创环境（麒麟 ARM · 金仓 · 离线部署）。</p></div>
     </div>
   </div>
 </section>
@@ -350,12 +376,12 @@ footer{border-top:1px solid var(--hairline-2);padding:44px 0 56px;margin-top:40p
     <div class="archive-teaser">
       <a class="at-cell" href="archive.html">
         <span class="k">~/archive/online</span>
-        <span class="n">61</span>
+        <span class="n">63</span>
         <span class="d">在线小作品 — MCP 服务器、爬虫自动化、CV 检测、桌面客户端</span>
       </a>
       <a class="at-cell" href="archive.html#forks">
         <span class="ish k">~/archive/forks</span>
-        <span class="n">33</span>
+        <span class="n">32</span>
         <span class="d">Forks — 学习与研究用途的参考仓库</span>
       </a>
     </div>
@@ -377,13 +403,13 @@ footer{border-top:1px solid var(--hairline-2);padding:44px 0 56px;margin-top:40p
 (function(){
   const LINES = [
     {type:"cmd", text:"whoami"},
-    {type:"out", html:'<span style="color:var(--ink)">Samge</span> — AI Agent 工程师 · 全栈'},
+    {type:"out", html:'<span style="color:var(--ink)">Samge</span> — AI 应用 / Agent 开发工程师'},
     {type:"cmd", text:"cat focus.txt"},
-    {type:"out", html:'<span style="color:var(--ink-dim)">agent 评测 · 决策模型 · 工具链 · 桌面 Agent</span>'},
+    {type:"out", html:'<span style="color:var(--ink-dim)">Agent 开发 · RAG · 本地模型部署 · AI-native 快速开发</span>'},
     {type:"cmd", text:"ls ~/works | head -5"},
-    {type:"out", html:'jev-arena/  booster-match-runner/  BizOwl/  report-sage/  ragflow-upload/'},
+    {type:"out", html:'Qanvas/  BiTrans/  BizOwl/  llm-infra/  ragflow-upload/'},
     {type:"cmd", text:"uptime"},
-    {type:"out", html:'<span style="color:var(--accent)">6 年</span> 持续构建 · <span style="color:var(--accent)">60+</span> 原创仓库 · 双 2080Ti 工作站在线'},
+    {type:"out", html:'<span style="color:var(--accent)">10 年</span>工程 · <span style="color:var(--accent)">535+</span> stars · MVP 单日 0→1 ×2'},
   ];
   const body = document.getElementById('termBody');
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -419,10 +445,10 @@ footer{border-top:1px solid var(--hairline-2);padding:44px 0 56px;margin-top:40p
 /* ── activity feed (static, recent-first) ── */
 (function(){
   const feed = [
-    ["09-20","BiTrans 双语翻译 App (Kotlin)"],
-    ["09-19","booster-match-runner 3v3 跑批优化"],
-    ["09-15","funny-pets 上线自定义域"],
-    ["09-11","wzyp-view 数据洞察站"],
+    ["09-26","motrixlab-beni 获官方反馈"],
+    ["09-24","Qanvas 端侧画布 · 单日 0→1"],
+    ["09-20","BiTrans 实时双语翻译发布"],
+    ["08-15","BizOwl · LangGraph 重构"],
     ["09-06","AgentInterview 学习工具 v2"],
   ];
   document.getElementById('activityFeed').innerHTML = feed.map(f =>
@@ -435,20 +461,6 @@ footer{border-top:1px solid var(--hairline-2);padding:44px 0 56px;margin-top:40p
   const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');
 
   const stages = {
-    'jev-arena': () => `
-      <div class="stage" data-stage="arena">
-        <div class="stage-head"><span>tetris · seed=42</span><span class="live-dot"></span></div>
-        <div class="stage-body">
-          <div class="arena-board" id="arenaBoard"></div>
-          <div class="prob-bars">
-            <div class="prob-row"><span>col 0</span><span class="bar"><i style="--w:12%"></i></span><span class="val">.12</span></div>
-            <div class="prob-row"><span>col 2</span><span class="bar"><i style="--w:64%"></i></span><span class="val">.64</span></div>
-            <div class="prob-row"><span>col 3</span><span class="bar"><i style="--w:21%"></i></span><span class="val">.21</span></div>
-            <div class="prob-row"><span>col 5</span><span class="bar"><i style="--w:03%"></i></span><span class="val">.03</span></div>
-          </div>
-        </div>
-        <div class="stage-foot"><span>choice=argmax(col 2)</span><span>Σp=1.00 ✓</span></div>
-      </div>`,
     'booster-match-runner': () => `
       <div class="stage" data-stage="booster">
         <div class="stage-head"><span>3v3 · booster sim</span><span class="live-dot"></span></div>
@@ -462,9 +474,51 @@ footer{border-top:1px solid var(--hairline-2);padding:44px 0 56px;margin-top:40p
         </div>
         <div class="stage-foot"><span>events.jsonl 增量读取</span><span>poll 3s</span></div>
       </div>`,
+    'Qanvas': () => `
+      <div class="stage" data-stage="qanvas">
+        <div class="stage-head"><span>qanvas · denoising 7/20</span><span class="live-dot"></span></div>
+        <div class="stage-body">
+          <div class="qanvas-stage" id="qGrid"></div>
+          <div class="qstages" id="qStages">
+            <span class="qstage">Text encoder</span><span class="qstage">Denoising 7/20</span><span class="qstage">VAE decode</span><span class="qstage on">Done</span>
+          </div>
+          <span class="qbadge"><span class="rgba-sw"></span>RGBA transparent sticker · on-device</span>
+        </div>
+        <div class="stage-foot"><span>前台服务 · 锁屏不死</span><span>100% offline</span></div>
+      </div>`,
+    'BiTrans': () => `
+      <div class="stage" data-stage="bitrans">
+        <div class="stage-head"><span>bitrans · <span class="vad-dot"></span>VAD listening</span><span class="live-dot"></span></div>
+        <div class="stage-body">
+          <div class="wave" id="bWave"></div>
+          <div class="caption-stream" id="bCaps">
+            <div class="cap"><span class="src">你好，很高兴认识你</span><span class="dst">Hello, nice to meet you</span></div>
+            <div class="cap l2"><span class="src">Me too! Let's practice together</span><span class="dst">我也是！一起练吧</span></div>
+          </div>
+        </div>
+        <div class="stage-foot"><span>SenseVoice int8 · 五语判别</span><span>¥0 · 0 API</span></div>
+      </div>`,
+    'llm-infra': () => `
+      <div class="stage" data-stage="infra">
+        <div class="stage-head"><span>llm-infra · on-prem</span><span class="live-dot"></span></div>
+        <div class="stage-body">
+          <div class="pipeline" id="infraPipe" style="margin-top:0">
+            <span class="pnode">vLLM ×GPU</span><span class="parrow"></span>
+            <span class="pnode">OneAPI 网关</span><span class="parrow"></span>
+            <span class="pnode">Dify RAG</span><span class="parrow"></span>
+            <span class="pnode on">内部工具</span>
+          </div>
+          <div class="score-list">
+            <div class="score-row"><span class="name">Qwen / DeepSeek</span><span class="bar"><i style="--w:86%"></i></span><span class="val">在线</span></div>
+            <div class="score-row"><span class="name">bge-m3 emb/rerank</span><span class="bar"><i style="--w:74%"></i></span><span class="val">服务</span></div>
+            <div class="score-row"><span class="name">Milvus + MinIO</span><span class="bar"><i style="--w:92%"></i></span><span class="val">就绪</span></div>
+          </div>
+        </div>
+        <div class="stage-foot"><span>业务与模型解耦</span><span>2024–2026</span></div>
+      </div>`,
     'BizOwl': () => `
       <div class="stage" data-stage="bizowl">
-        <div class="stage-head"><span>bizowl · chat + memory</span><span class="live-dot"></span></div>
+        <div class="stage-head"><span>bizowl · agent loop + memory</span><span class="live-dot"></span></div>
         <div class="stage-body">
           <div class="chatbox" id="owlChat">
             <div class="msg user">帮我查一下这家公司的股权结构</div>
@@ -507,7 +561,7 @@ footer{border-top:1px solid var(--hairline-2);padding:44px 0 56px;margin-top:40p
       </div>`,
   };
 
-  const railKinds = ['agent-eval','agent-vs-agent','desktop-agent','profile-dist','rag-tool'];
+  const railKinds = ['mvp-1day','mvp','agent-rebuild','on-prem-infra','oss-535'];
 
   document.getElementById('worksList').innerHTML = T.map((w,i) => `
     <article class="work" id="w-${w.id}">
@@ -517,7 +571,7 @@ footer{border-top:1px solid var(--hairline-2);padding:44px 0 56px;margin-top:40p
       </div>
       <div class="work-main">
         <div class="work-head">
-          <h3><a href="${w.repo}" target="_blank" rel="noopener">${esc(w.title)}</a></h3>
+          <h3>${w.repo ? `<a href="${w.repo}" target="_blank" rel="noopener">${esc(w.title)}</a>` : esc(w.title)}</h3>
           <span class="sub">${esc(w.subtitle)}</span>
           <span class="period">${esc(w.period)}</span>
         </div>
@@ -537,19 +591,6 @@ footer{border-top:1px solid var(--hairline-2);padding:44px 0 56px;margin-top:40p
   /* ── stage animations (IntersectionObserver) ── */
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  // jev-arena board
-  const board = document.getElementById('arenaBoard');
-  if (board){
-    const pattern = [
-      "001100","011110","001100","000000","110011","011110","001100","000000",
-    ];
-    const falling = [2,3]; // hi cells
-    board.innerHTML = pattern.flatMap((row,ri) => row.split('').map((c,ci) => {
-      const on = c==='1';
-      const hi = ri===0 && (ci===2||ci===3);
-      return `<span class="arena-cell${on?' on':''}${hi?' hi':''}"></span>`;
-    })).join('');
-  }
   // booster timeline
   const events = [
     ["00:12","r","定位球"],
@@ -594,6 +635,44 @@ footer{border-top:1px solid var(--hairline-2);padding:44px 0 56px;margin-top:40p
         robots.forEach((r,i)=>{ r.style.transform = `translate(${Math.sin(t*.5+i)*14}px, ${Math.cos(t*.4+i*2)*10}px)`; });
       }, 1500);
     }
+  }
+  // qanvas grid shimmer
+  const qg = document.getElementById('qGrid');
+  if (qg && !reduce){
+    qg.innerHTML = Array.from({length: 24}, () => '<span class="qcell"></span>').join('');
+    const cells = qg.querySelectorAll('.qcell');
+    let k = 0;
+    // 初始点亮几个像"生成中"的格子
+    [3,4,7,8,9,12,13].forEach(idx => cells[idx].classList.add('lit'));
+    cells[16].classList.add('lit2'); cells[17].classList.add('lit2');
+    setInterval(()=>{
+      cells.forEach(c => c.classList.remove('lit','lit2'));
+      const base = Math.floor(Math.random()*8);
+      for (let j=0;j<7;j++){ const idx=(base+j*3)%24; cells[idx].classList.add(j%3===0?'lit2':'lit'); }
+    }, 2000);
+    // stages 轮转
+    const qst = document.getElementById('qStages');
+    if (qst){
+      const sts = qst.querySelectorAll('.qstage');
+      let cur = 0;
+      setInterval(()=>{ sts.forEach((n,i)=>n.classList.toggle('on', i===cur)); cur=(cur+1)%sts.length; }, 1200);
+    }
+  }
+  // bitrans wave + captions
+  const bw = document.getElementById('bWave');
+  if (bw && !reduce){
+    bw.innerHTML = Array.from({length: 26}, () => '<i style="animation-delay:' + (Math.random()*-1.3).toFixed(2) + 's"></i>').join('');
+    const caps = document.querySelectorAll('#bCaps .cap');
+    caps.forEach((c,i)=>setTimeout(()=>c.classList.add('show'), 900 + i*700));
+  } else {
+    document.querySelectorAll('#bCaps .cap').forEach(c=>c.classList.add('show'));
+  }
+  // infra pipeline steps
+  const ipipe = document.getElementById('infraPipe');
+  if (ipipe && !reduce){
+    const nodes = ipipe.querySelectorAll('.pnode');
+    let cur = 0;
+    setInterval(()=>{ nodes.forEach((n,i)=>n.classList.toggle('on', i===cur)); cur=(cur+1)%nodes.length; }, 1100);
   }
   // bizowl chat + memory
   const owlChat = document.getElementById('owlChat');
