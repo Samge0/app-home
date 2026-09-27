@@ -12,8 +12,8 @@ Samge 的个人主页 —— AI Agent 工程实践展示。
 
 暗色终端美学（inspired by [VoltAgent DESIGN.md](https://github.com/VoltAgent/awesome-design-md)）：
 虚空黑画布 `#101010` + 电光绿单强调 `#00d992` + mono 排印。
-每个代表作的展示面板都提取自项目本身的元素——jev-arena 的概率分布条、
-booster 的球场与事件时间线、BizOwl 的对话与记忆块、Report Sage 的流水线与评分、
+每个代表作的展示面板都提取自项目本身的元素——Qanvas 的去噪格子与生成阶段、
+BiTrans 的声波与双语字幕、BizOwl 的对话与记忆块、内网 LLM 基础设施的流水线与状态、
 ragflow-upload 的上传队列。
 
 ## 维护
