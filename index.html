@@ -71,8 +71,8 @@ kbd,code{font-family:var(--mono)}
 .hero-scroll{padding:10px 14px 12px;font-family:var(--mono);font-size:.78rem}
 .hrow{display:flex;justify-content:space-between;gap:10px;padding:3px 0;color:var(--body)}
 .hrow .h-date{color:var(--mute-2);font-size:.72rem;flex-shrink:0}
-.hrow a{color:var(--ink-dim)}
-.hrow a:hover{color:var(--accent)}
+.hrow a{color:var(--ink-dim);transition:color .15s}
+.hrow a:hover{color:var(--accent);text-decoration:underline;text-underline-offset:3px}
 .h-title{font-family:var(--mono);font-size:.72rem;color:var(--mute);letter-spacing:.08em}
 .panel-head{font-family:var(--mono);font-size:.72rem;color:var(--mute);letter-spacing:.08em;padding:9px 14px;border-bottom:1px solid var(--hairline-2);display:flex;justify-content:space-between;align-items:center}
 .panel-head .live-dot{width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 8px var(--accent);animation:pulse 2s infinite}
@@ -432,14 +432,14 @@ footer{border-top:1px solid var(--hairline-2);padding:44px 0 56px;margin-top:40p
 /* ── activity feed (static, recent-first) ── */
 (function(){
   const feed = [
-    ["09-26","motrixlab-beni 获官方反馈"],
-    ["09-24","Qanvas 端侧画布 · 单日 0→1"],
-    ["09-20","BiTrans 实时双语翻译发布"],
-    ["08-15","BizOwl · LangGraph 重构"],
-    ["09-06","AgentInterview 学习工具 v2"],
+    ["09-26","motrixlab-beni 获官方反馈","motrixlab-beni"],
+    ["09-24","Qanvas 端侧画布 · 单日 0→1","Qanvas"],
+    ["09-20","BiTrans 实时双语翻译发布","BiTrans"],
+    ["08-15","BizOwl · LangGraph 重构","BizOwl"],
+    ["09-06","AgentInterview 学习工具 v2","AgentInterview"],
   ];
   document.getElementById('activityFeed').innerHTML = feed.map(f =>
-    `<div class="hrow"><a href="archive.html">${f[1]}</a><span class="h-date">${f[0]}</span></div>`).join('');
+    `<div class="hrow"><a href="https://github.com/Samge0/${f[2]}" target="_blank" rel="noopener" title="打开 GitHub 仓库">${f[1]}</a><span class="h-date">${f[0]}</span></div>`).join('');
 })();
 
 /* ── featured works render ── */
@@ -667,6 +667,35 @@ footer{border-top:1px solid var(--hairline-2);padding:44px 0 56px;margin-top:40p
     es.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('in'); });
   },{threshold:.25});
   document.querySelectorAll('.work').forEach(w=>io.observe(w));
+
+  /* ── GitHub API: 实时 star 数刷新（ragflow 卡 + hero meta），失败静默保持静态值 ── */
+  (async function(){
+    try {
+      const res = await fetch('https://api.github.com/users/Samge0/repos?per_page=100&sort=pushed');
+      if (!res.ok) return;
+      const repos = await res.json();
+      const totalStars = repos.reduce((n, r) => n + (r.stargazers_count || 0), 0);
+      const rf = repos.find(r => r.name === 'ragflow-upload');
+      if (rf && rf.stargazers_count) {
+        // featured 卡 facts
+        document.querySelectorAll('.wfact').forEach(f => {
+          const v = f.querySelector('.v');
+          if (v && /535/.test(v.textContent)) v.textContent = `★ ${rf.stargazers_count} · 持续维护 2 年`;
+        });
+        // stage-foot 里的 ★ 535
+        document.querySelectorAll('.stage-foot span').forEach(sp => {
+          if (/★\s*535/.test(sp.textContent)) sp.textContent = `★ ${rf.stargazers_count}`;
+        });
+      }
+      // hero meta: '535+ Stars' → 实时总星数
+      document.querySelectorAll('.hero-meta span').forEach(sp => {
+        if (/535\+/.test(sp.textContent)) {
+          const b = sp.querySelector('b');
+          if (b) { b.textContent = `${totalStars}`; sp.innerHTML = `<b>${totalStars}</b> Stars · 实时`; }
+        }
+      });
+    } catch (e) { /* 离线/限流时保持静态值 */ }
+  })();
 })();
 </script>
 </body>

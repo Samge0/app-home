@@ -58,6 +58,7 @@ h1{font-size:clamp(1.6rem,3.4vw,2.2rem);font-weight:700;color:var(--ink);letter-
 .prow .pname a{color:inherit}
 .prow .pname a:hover{color:var(--accent)}
 .prow .plang{font-family:var(--mono);font-size:.68rem;color:var(--mute-2)}
+.prow .plang b, .prow .plang .st-star{color:var(--accent-soft);font-weight:600}
 .prow .pdesc{font-size:.84rem;color:var(--body)}
 .prow .pdate{font-family:var(--mono);font-size:.7rem;color:var(--mute-2);text-align:right}
 .prow.is-agent .pname::before{content:"●";color:var(--accent);font-size:.5rem;margin-right:7px;vertical-align:2px}
@@ -156,13 +157,19 @@ footer{border-top:1px solid var(--hairline-2);padding:36px 0 48px;margin-top:56p
       (curCat === 'all' || p.cat === curCat || p.cat2 === curCat) &&
       (!kw || p.name.toLowerCase().includes(kw) || (p.desc||'').toLowerCase().includes(kw))
     );
-    table.innerHTML = rows.length ? rows.map(p => `
-      <div class="prow ${p.cat==='agent'?'is-agent':''}">
+    table.innerHTML = rows.length ? rows.map(p => {
+      const meta = [];
+      if (p.live && p.live.stars > 0) meta.push(`<b class="st-star">★ ${fmtStars(p.live.stars)}</b>`);
+      if (p.live && p.live.lang) meta.push(`<span class="live-lang">${esc(p.live.lang)}</span>`);
+      const langHtml = meta.length ? meta.join(' · ') : esc(p.lang||'');
+      return `
+      <div class="prow ${p.cat==='agent'?'is-agent':''}${p.auto?' auto-added':''}">
         <span class="pname"><a href="${p.url}" target="_blank" rel="noopener">${esc(p.name)}</a></span>
-        <span class="plang">${esc(p.lang||'')}</span>
+        <span class="plang">${langHtml}</span>
         <span class="pdesc">${esc(p.desc||'')}</span>
         <span class="pdate">${esc(p.date||'')}</span>
-      </div>`).join('')
+      </div>`;
+    }).join('')
       : '<div style="padding:32px;text-align:center;color:var(--mute-2);font-family:var(--mono);font-size:.82rem">no match — 试试更短的关键词</div>';
     meta.textContent = `// ${rows.length} / ${ONLINE.length} items · cat=${curCat}${q.value.trim() ? ' · q="' + q.value.trim() + '"' : ''}`;
   }
@@ -178,7 +185,87 @@ footer{border-top:1px solid var(--hairline-2);padding:36px 0 48px;margin-top:56p
   document.getElementById('forkCloud').innerHTML = FORKS.map(f =>
     `<a class="fchip" href="${f.url}" target="_blank" rel="noopener">${esc(f.name)}<i>${esc(f.desc)}</i></a>`
   ).join('');
+
+  /* ── GitHub API 动态层：拉取公开仓库，合并静态分类，增量补充新仓库 + 实时 star ── */
+  const GH_USER = 'Samge0';
+  // 静态数据里已知的仓库名集合（避免重复渲染）
+  const known = new Set([
+    ...ONLINE.map(o => o.name),
+    ...FORKS.map(f => f.name),
+    ...['Qanvas','BiTrans','BizOwl','booster-match-runner','ragflow-upload','dify-upload'] // 首页代表作
+  ]);
+  const repoMeta = {}; // name -> {stars, pushed_at, html_url, description}
+
+  function fmtStars(n){
+    if (n >= 1000) return (n/1000).toFixed(1).replace(/\.0$/,'') + 'k';
+    return String(n);
+  }
+
+  async function fetchAllRepos(){
+    const all = [];
+    for (let page = 1; page <= 5; page++) {
+      const res = await fetch(`https://api.github.com/users/${GH_USER}/repos?per_page=100&sort=pushed&page=${page}`);
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      const batch = await res.json();
+      all.push(...batch);
+      if (batch.length < 100) break;
+    }
+    return all;
+  }
+
+  function isFork(r){ return r.fork; }
+
+  function applyDynamics(repos){
+    const now = new Map(repos.map(r => [r.name, r]));
+    // 1. 静态 ONLINE 条目：把实时 star / 语言写进数据对象（render 时输出，不被重绘冲掉）
+    ONLINE.forEach(o => {
+      const r = now.get(o.name);
+      if (!r) return;
+      o.live = {stars: r.stargazers_count || 0, lang: r.language || ''};
+    });
+    // 2. GitHub 上有、静态表没有的原创仓库 → 追加到表尾（标记为动态新增）
+    const added = [];
+    repos.filter(r => !r.fork && !known.has(r.name) && r.name !== 'Samge0').forEach(r => {
+      ONLINE.push({name: r.name, cat: 'auto', auto: true, date: (r.pushed_at||'').slice(0,10),
+                   desc: r.description || '（见仓库 README）', lang: r.language || '', url: r.html_url, demo: 'code'});
+      added.push(r.name);
+    });
+    if (added.length) console.info(`[archive] +${added.length} repos from GitHub:`, added.join(', '));
+    // 3. forks 区：GitHub fork 数与静态表的差集 → 追加
+    const forkExtra = repos.filter(isFork).filter(r => !known.has(r.name));
+    if (forkExtra.length) {
+      document.getElementById('forkCloud').insertAdjacentHTML('beforeend',
+        forkExtra.map(r => `<a class="fchip" href="${r.html_url}" target="_blank" rel="noopener">${esc(r.name)}<i>${esc(r.description || '')}</i></a>`).join(''));
+    }
+    // 4. 更新计数（保留当前搜索/分类状态重新过滤）
+    render(curCat);
+  }
+
+  function showSyncState(state, msg){
+    const el = document.getElementById('syncState');
+    if (!el) return;
+    el.textContent = msg;
+    el.dataset.state = state;
+  }
+
+  // 页脚上方放一个同步状态指示
+  const syncEl = document.createElement('div');
+  syncEl.id = 'syncState';
+  syncEl.className = 'sync-state';
+  syncEl.textContent = '⟳ 同步 GitHub 仓库数据…';
+  document.querySelector('.result-meta').after(syncEl);
+
+  fetchAllRepos()
+    .then(repos => { applyDynamics(repos); showSyncState('ok', `● GitHub 实时同步完成（${repos.length} repos）`); })
+    .catch(err => { console.warn('[archive] GitHub API sync failed:', err); showSyncState('fail', '○ GitHub 同步不可用，显示静态归档'); });
 })();
 </script>
+<style>
+.sync-state{font-family:var(--mono);font-size:.68rem;color:var(--mute-2);padding:6px 0 16px}
+.sync-state[data-state="ok"]{color:var(--accent)}
+.sync-state[data-state="fail"]{color:var(--mute-2)}
+.prow.auto-added .pname::after{content:"new";font-size:.56rem;color:var(--accent);border:1px solid rgba(0,217,146,.35);border-radius:3px;padding:0 4px;margin-left:8px;vertical-align:1px}
+.live-lang{color:var(--accent-soft)}
+</style>
 </body>
 </html>
