@@ -162,6 +162,19 @@ footer{border-top:1px solid var(--hairline-2);padding:36px 0 48px;margin-top:56p
   const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');
   const CAT_CN = {agent:'agent', tool:'tool', app:'app', ai:'ai/cv'};
 
+  // 首页代表作也进存档表（featured 徽标），llm-infra 无仓库不列
+  window.PROJECTS.FEATURED.filter(f => f.name).forEach(f => {
+    if (ONLINE.some(o => o.name === f.name)) {  // 已有静态条目则只标记
+      const o = ONLINE.find(o => o.name === f.name);
+      o.featured = true;
+      if (f.period) o.date = o.date || f.period;
+    } else {
+      ONLINE.push({name: f.name, cat: 'featured', featured: true, auto: false,
+                   date: f.period || '', desc: f.summary || f.subtitle,
+                   lang: (f.lang || '').split(' ·')[0], url: f.repo, demo: 'code'});
+    }
+  });
+
   const table = document.getElementById('ptable');
   const meta = document.getElementById('resultMeta');
   const q = document.getElementById('q');
@@ -199,9 +212,10 @@ footer{border-top:1px solid var(--hairline-2);padding:36px 0 48px;margin-top:56p
       if (p.live && p.live.lang) meta.push(`<span class="live-lang">${esc(p.live.lang)}</span>`);
       const langHtml = meta.length ? meta.join(' · ') : esc(p.lang||'');
       const shownDate = p.updated || p.date || '';
+      const pin = p.featured ? '<span class="pin" title="首页代表作">★ featured</span>' : '';
       return `
-      <div class="prow ${p.cat==='agent'?'is-agent':''}${p.auto?' auto-added':''}">
-        <span class="pname"><a href="${p.url}" target="_blank" rel="noopener">${esc(p.name)}</a></span>
+      <div class="prow ${p.cat==='agent'?'is-agent':''}${p.auto?' auto-added':''}${p.featured?' is-featured':''}">
+        <span class="pname">${pin}<a href="${p.url}" target="_blank" rel="noopener">${esc(p.name)}</a></span>
         <span class="plang">${langHtml}</span>
         <span class="pdesc">${esc(p.desc||'')}</span>
         <span class="pdate">${esc(shownDate)}</span>
@@ -229,8 +243,7 @@ footer{border-top:1px solid var(--hairline-2);padding:36px 0 48px;margin-top:56p
   // 静态数据里已知的仓库名集合（避免重复渲染）
   const known = new Set([
     ...ONLINE.map(o => o.name),
-    ...FORKS.map(f => f.name),
-    ...['Qanvas','BiTrans','BizOwl','booster-match-runner','ragflow-upload','dify-upload'] // 首页代表作
+    ...FORKS.map(f => f.name)
   ]);
   const repoMeta = {}; // name -> {stars, pushed_at, html_url, description}
 
@@ -309,6 +322,7 @@ footer{border-top:1px solid var(--hairline-2);padding:36px 0 48px;margin-top:56p
 .sync-state[data-state="fail"]{color:var(--mute-2)}
 .prow.auto-added .pname::after{content:"new";font-size:.56rem;color:var(--accent);border:1px solid rgba(0,217,146,.35);border-radius:3px;padding:0 4px;margin-left:8px;vertical-align:1px}
 .live-lang{color:var(--accent-soft)}
+.prow .pin{font-family:var(--mono);font-size:.6rem;color:var(--accent);border:1px solid rgba(0,217,146,.35);border-radius:3px;padding:0 5px;margin-right:8px;vertical-align:1px;white-space:nowrap}
 </style>
 </body>
 </html>
