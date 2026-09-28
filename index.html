@@ -309,6 +309,7 @@ footer{border-top:1px solid var(--hairline-2);padding:44px 0 56px;margin-top:40p
         <a class="btn btn-primary" href="#works">查看作品 ↓</a>
         <a class="btn btn-outline" href="archive.html">archive · 60+ 项目归档</a>
         <a class="btn btn-outline" href="https://github.com/Samge0" target="_blank" rel="noopener">github↗</a>
+        <a class="btn btn-outline" id="discordBtn" href="https://discord.com/invite/eRuSqve8CE" target="_blank" rel="noopener" style="display:none">discord<span id="discordOnline" style="opacity:.55;font-size:.85em"></span></a>
         <a class="btn btn-outline" href="mailto:samge720@gmail.com">samge720@gmail.com</a>
       </div>
       <div class="hero-meta">
@@ -383,6 +384,27 @@ footer{border-top:1px solid var(--hairline-2);padding:44px 0 56px;margin-top:40p
     <span>© 2026 Samge · design: terminal-minimal</span>
   </div>
 </footer>
+
+<script>
+/* discord invite badge: fetch live online count, hide gracefully on failure */
+(function(){
+  var btn = document.getElementById('discordBtn');
+  if (!btn) return;
+  var done = false;
+  fetch('https://discord.com/api/v10/invites/eRuSqve8CE?with_counts=true')
+    .then(function(r){ return r.ok ? r.json() : Promise.reject(r.status); })
+    .then(function(d){
+      var ap = (d && d.approximate_presence_count) || 0;
+      var mem = (d && d.approximate_member_count) || 0;
+      var el = document.getElementById('discordOnline');
+      if (el && mem) el.textContent = ' · ' + mem + '人/' + ap + '在线';
+      btn.style.display = '';
+      done = true;
+    })
+    .catch(function(){ if (!done) btn.style.display = 'none'; });
+  setTimeout(function(){ if (!done) { /* keep hidden on timeout */ } }, 6000);
+})();
+</script>
 
 <script src="projects-data.js?v=20260928b"></script>
 <script>
