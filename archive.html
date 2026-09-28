@@ -49,6 +49,11 @@ h1{font-size:clamp(1.6rem,3.4vw,2.2rem);font-weight:700;color:var(--ink);letter-
 .cat:hover{color:var(--ink-dim);border-color:#3a3a38}
 .cat.on{color:var(--accent);border-color:rgba(0,217,146,.4);background:var(--accent-dim)}
 .result-meta{font-family:var(--mono);font-size:.72rem;color:var(--mute-2);padding:14px 0 18px}
+/* sort select */
+.sortsel select{font-family:var(--mono);font-size:.76rem;color:var(--ink-dim);background:var(--canvas-2);border:1px solid var(--hairline);border-radius:8px;padding:8px 12px;cursor:pointer;outline:none;transition:border-color .15s}
+.sortsel select:hover{border-color:#3a3a38}
+.sortsel select:focus{border-color:var(--accent)}
+.sortsel select option{background:var(--canvas-2);color:var(--ink-dim)}
 /* table */
 .ptable{border:1px solid var(--hairline-2);border-radius:10px;overflow:hidden}
 .prow{display:grid;grid-template-columns:150px 64px 1fr 84px;gap:16px;align-items:baseline;padding:15px 20px;border-bottom:1px solid var(--hairline-2);transition:background .15s}
@@ -113,6 +118,17 @@ footer{border-top:1px solid var(--hairline-2);padding:36px 0 48px;margin-top:56p
       <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="7" cy="7" r="5"/><path d="M11 11l4 4"/></svg>
       <input id="q" type="text" placeholder="grep -i … 搜索名称或描述" autocomplete="off">
     </div>
+    <div class="sortsel">
+      <select id="sort" aria-label="排序">
+        <option value="date-desc">更新日期 ↓</option>
+        <option value="date-asc">更新日期 ↑</option>
+        <option value="created-desc">创建日期 ↓</option>
+        <option value="created-asc">创建日期 ↑</option>
+        <option value="stars-desc">Star 数 ↓</option>
+        <option value="stars-asc">Star 数 ↑</option>
+        <option value="name-asc">名称 A→Z</option>
+      </select>
+    </div>
     <div class="cats" id="cats">
       <button class="cat on" data-cat="all">all</button>
       <button class="cat" data-cat="agent">agent</button>
@@ -149,31 +165,53 @@ footer{border-top:1px solid var(--hairline-2);padding:36px 0 48px;margin-top:56p
   const table = document.getElementById('ptable');
   const meta = document.getElementById('resultMeta');
   const q = document.getElementById('q');
+  const sortSel = document.getElementById('sort');
   let curCat = 'all';
+
+  function sortVal(p, key){
+    if (key === 'stars') return p.stars || (p.live && p.live.stars) || 0;
+    if (key === 'created') return p.created || p.date || '';
+    if (key === 'updated') return p.updated || p.date || '';
+    if (key === 'date') return p.updated || p.date || '';  // 更新日期（date-desc 默认项）
+    return '';
+  }
+  function sortRows(rows){
+    const [key, dir] = sortSel.value.split('-');
+    rows.sort((x, y) => {
+      let cmp;
+      if (key === 'name') cmp = x.name.localeCompare(y.name);
+      else if (key === 'stars') cmp = (sortVal(x,'stars') - sortVal(y,'stars'));
+      else cmp = String(sortVal(x, key)).localeCompare(String(sortVal(y, key)));
+      return dir === 'asc' ? cmp : -cmp;
+    });
+    return rows;
+  }
 
   function render(){
     const kw = q.value.trim().toLowerCase();
-    const rows = ONLINE.filter(p =>
+    const rows = sortRows(ONLINE.filter(p =>
       (curCat === 'all' || p.cat === curCat || p.cat2 === curCat) &&
       (!kw || p.name.toLowerCase().includes(kw) || (p.desc||'').toLowerCase().includes(kw))
-    );
+    ));
     table.innerHTML = rows.length ? rows.map(p => {
       const meta = [];
       if (p.live && p.live.stars > 0) meta.push(`<b class="st-star">★ ${fmtStars(p.live.stars)}</b>`);
       if (p.live && p.live.lang) meta.push(`<span class="live-lang">${esc(p.live.lang)}</span>`);
       const langHtml = meta.length ? meta.join(' · ') : esc(p.lang||'');
+      const shownDate = p.updated || p.date || '';
       return `
       <div class="prow ${p.cat==='agent'?'is-agent':''}${p.auto?' auto-added':''}">
         <span class="pname"><a href="${p.url}" target="_blank" rel="noopener">${esc(p.name)}</a></span>
         <span class="plang">${langHtml}</span>
         <span class="pdesc">${esc(p.desc||'')}</span>
-        <span class="pdate">${esc(p.date||'')}</span>
+        <span class="pdate">${esc(shownDate)}</span>
       </div>`;
     }).join('')
       : '<div style="padding:32px;text-align:center;color:var(--mute-2);font-family:var(--mono);font-size:.82rem">no match — 试试更短的关键词</div>';
     meta.textContent = `// ${rows.length} / ${ONLINE.length} items · cat=${curCat}${q.value.trim() ? ' · q="' + q.value.trim() + '"' : ''}`;
   }
   q.addEventListener('input', render);
+  sortSel.addEventListener('change', render);
   document.getElementById('cats').addEventListener('click', e => {
     const b = e.target.closest('.cat'); if (!b) return;
     document.querySelectorAll('.cat').forEach(c => c.classList.toggle('on', c === b));
@@ -217,16 +255,21 @@ footer{border-top:1px solid var(--hairline-2);padding:36px 0 48px;margin-top:56p
 
   function applyDynamics(repos){
     const now = new Map(repos.map(r => [r.name, r]));
-    // 1. 静态 ONLINE 条目：把实时 star / 语言写进数据对象（render 时输出，不被重绘冲掉）
+    // 1. 静态 ONLINE 条目：实时 star / 语言 / 日期写进数据对象（render 时输出，不被重绘冲掉）
     ONLINE.forEach(o => {
       const r = now.get(o.name);
       if (!r) return;
       o.live = {stars: r.stargazers_count || 0, lang: r.language || ''};
+      o.stars = r.stargazers_count || 0;
+      o.created = (r.created_at || '').slice(0, 10) || o.date;
+      o.updated = (r.pushed_at || '').slice(0, 10) || o.date;
     });
     // 2. GitHub 上有、静态表没有的原创仓库 → 追加到表尾（标记为动态新增）
     const added = [];
     repos.filter(r => !r.fork && !known.has(r.name) && r.name !== 'Samge0').forEach(r => {
       ONLINE.push({name: r.name, cat: 'auto', auto: true, date: (r.pushed_at||'').slice(0,10),
+                   created: (r.created_at||'').slice(0,10), updated: (r.pushed_at||'').slice(0,10),
+                   stars: r.stargazers_count || 0,
                    desc: r.description || '（见仓库 README）', lang: r.language || '', url: r.html_url, demo: 'code'});
       added.push(r.name);
     });
