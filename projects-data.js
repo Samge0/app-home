@@ -136,6 +136,45 @@ const FEATURED = [
       ]
   },
   {
+      "id": "booster-match-runner",
+      "name": "booster-match-runner",
+      "title": "Booster Match Runner",
+      "subtitle": "3v3 机器人足球对抗面板 · 获赛事官方表扬",
+      "period": "2026.07–09",
+      "lang": "TypeScript",
+      "tags": [
+          "vscode-extension",
+          "agent-vs-agent",
+          "i18n"
+      ],
+      "summary": "Booster Studio 侧栏面板：选两个 agent 开一场红蓝 3v3 机器人足球，实时比分、关键事件时间线、无头跑批、对局档案自动归档与 MP4 录制。实际参赛者使用，获赛事官方表扬。",
+      "story": [
+          "比分每 3 秒轮询、终场自动判定；进球/犯规/定位球从容器 events.jsonl 增量读取，生成关键事件时间线。",
+          "整块面板——每个标签、按钮、事件名——一键切换中英文，语言选择被记住。"
+      ],
+      "facts": [
+          [
+              "形态",
+              "VS Code 侧栏扩展"
+          ],
+          [
+              "模式",
+              "可视化对局 · 无头跑批"
+          ],
+          [
+              "产物",
+              "ZIP 档案 · CSV · MP4"
+          ]
+      ],
+      "repo": "https://github.com/Samge0/booster-match-runner",
+      "links": [
+          {
+              "label": "源码",
+              "href": "https://github.com/Samge0/booster-match-runner"
+          }
+      ]
+  },
+  {
       "id": "llm-infra",
       "name": "",
       "title": "内网 LLM / RAG 基础设施",

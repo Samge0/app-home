@@ -127,6 +127,28 @@ kbd,code{font-family:var(--mono)}
 .stage-head{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;border-bottom:1px solid var(--hairline-2);font-family:var(--mono);font-size:.68rem;color:var(--mute)}
 .stage-head .live-dot{width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 8px var(--accent);animation:pulse 2s infinite}
 .stage-body{padding:14px}
+/* booster: soccer pitch + timeline */
+.pitch{position:relative;height:150px;background:
+  repeating-linear-gradient(90deg,transparent 0 24px,rgba(255,255,255,.025) 24px 25px);
+  border:1px solid var(--hairline);border-radius:6px;overflow:hidden}
+.pitch .mid{position:absolute;left:50%;top:0;bottom:0;width:1px;background:var(--hairline)}
+.pitch .circle{position:absolute;left:50%;top:50%;width:52px;height:52px;border:1px solid var(--hairline);border-radius:50%;transform:translate(-50%,-50%)}
+.pitch .robot{position:absolute;width:14px;height:14px;border-radius:3px;transition:transform 1.4s cubic-bezier(.3,.7,.3,1)}
+.pitch .robot.r{background:#e0604c;box-shadow:0 0 10px rgba(224,96,76,.5)}
+.pitch .robot.b{background:#3f7bd9;box-shadow:0 0 10px rgba(63,123,217,.5)}
+.pitch .ball{position:absolute;width:7px;height:7px;border-radius:50%;background:#fff;box-shadow:0 0 8px rgba(255,255,255,.6);transition:transform 1.4s cubic-bezier(.3,.7,.3,1)}
+.pitch .goal-glow{position:absolute;top:0;bottom:0;width:26px;left:0;background:linear-gradient(90deg,rgba(224,96,76,.15),transparent)}
+.pitch .goal-glow.r{left:auto;right:0;background:linear-gradient(-90deg,rgba(63,123,217,.15),transparent)}
+.scoreboard{display:flex;align-items:center;justify-content:center;gap:14px;font-family:var(--mono);margin-bottom:10px}
+.scoreboard .team{font-size:.72rem;color:var(--mute)}
+.scoreboard .score{font-size:1.3rem;font-weight:700;color:var(--ink)}
+.scoreboard .colon{color:var(--mute-2)}
+.scoreboard .clock{font-size:.72rem;color:var(--accent);margin-left:6px}
+.tl-events{margin-top:12px;display:flex;flex-direction:column;gap:4px;font-family:var(--mono);font-size:.66rem}
+.tl-ev{display:flex;gap:8px;color:var(--mute)}
+.tl-ev .t{color:var(--mute-2);flex-shrink:0;width:34px}
+.tl-ev .who.r{color:#e0604c}.tl-ev .who.b{color:#3f7bd9}
+.tl-ev.goal .txt{color:var(--ink-dim)}
 /* qanvas: canvas grid + gen stages */
 .qanvas-stage{display:grid;grid-template-columns:repeat(3,1fr);grid-auto-rows:34px;gap:3px;margin-bottom:12px}
 .qcell{background:var(--surface-2);border-radius:3px;opacity:.5;transition:opacity .5s,background .5s}
@@ -468,6 +490,19 @@ footer{border-top:1px solid var(--hairline-2);padding:44px 0 56px;margin-top:40p
         </div>
         <div class="stage-foot"><span>业务与模型解耦</span><span>2024–2026</span></div>
       </div>`,
+    'booster-match-runner': () => `
+      <div class="stage" data-stage="booster">
+        <div class="stage-head"><span>3v3 · booster sim</span><span class="live-dot"></span></div>
+        <div class="stage-body">
+          <div class="scoreboard"><span class="team" style="color:#e0604c">RED agent</span><span class="score" id="scR">0</span><span class="colon">:</span><span class="score" id="scB">0</span><span class="team" style="color:#3f7bd9">BLUE agent</span><span class="clock" id="scClock">00:00</span></div>
+          <div class="pitch" id="bPitch">
+            <div class="mid"></div><div class="circle"></div>
+            <div class="goal-glow"></div><div class="goal-glow r"></div>
+          </div>
+          <div class="tl-events" id="bEvents"></div>
+        </div>
+        <div class="stage-foot"><span>events.jsonl 增量读取</span><span>poll 3s</span></div>
+      </div>`,
     'BizOwl': () => `
       <div class="stage" data-stage="bizowl">
         <div class="stage-head"><span>bizowl · agent loop + memory</span><span class="live-dot"></span></div>
@@ -495,7 +530,7 @@ footer{border-top:1px solid var(--hairline-2);padding:44px 0 56px;margin-top:40p
       </div>`,
   };
 
-  const railKinds = ['mvp-1day','mvp','agent-rebuild','on-prem-infra','oss-535'];
+  const railKinds = ['mvp-1day','mvp','agent-rebuild','agent-vs-agent','on-prem-infra','oss-535'];
 
   document.getElementById('worksList').innerHTML = T.map((w,i) => `
     <article class="work" id="w-${w.id}">
@@ -563,6 +598,52 @@ footer{border-top:1px solid var(--hairline-2);padding:44px 0 56px;margin-top:40p
     let cur = 0;
     setInterval(()=>{ nodes.forEach((n,i)=>n.classList.toggle('on', i===cur)); cur=(cur+1)%nodes.length; }, 1100);
   }
+  // booster timeline
+  const events = [
+    ["00:12","r","定位球"],
+    ["00:31","b","进球! 1-0"],
+    ["00:58","r","犯规"],
+    ["01:22","b","进球! 2-0"],
+  ];
+  const evBox = document.getElementById('bEvents');
+  if (evBox && !reduce){
+    let i = 0;
+    const timer = setInterval(()=>{
+      if (i>=events.length){ clearInterval(timer); return; }
+      const [t,who,txt] = events[i++];
+      const el = document.createElement('div');
+      el.className = 'tl-ev' + (txt.includes('进球')?' goal':'');
+      el.innerHTML = `<span class="t">${t}</span><span class="who ${who}">${who==='r'?'RED':'BLUE'}</span><span class="txt">${txt}</span>`;
+      evBox.appendChild(el);
+      if (txt.includes('进球')){
+        const isB = who==='b';
+        const el2 = isB ? document.getElementById('scB') : document.getElementById('scR');
+        el2.textContent = String(parseInt(el2.textContent)+1);
+      }
+    }, 1400);
+  } else if (evBox){
+    evBox.innerHTML = events.map(([t,who,txt])=>`<div class="tl-ev"><span class="t">${t}</span><span class="who ${who}">${who==='r'?'RED':'BLUE'}</span><span class="txt">${txt}</span></div>`).join('');
+  }
+  // booster pitch robots
+  const pitch = document.getElementById('bPitch');
+  if (pitch){
+    pitch.insertAdjacentHTML('beforeend',
+      '<span class="robot r" style="left:18%;top:22%"></span><span class="robot r" style="left:26%;top:52%"></span><span class="robot r" style="left:20%;top:78%"></span>' +
+      '<span class="robot b" style="left:74%;top:30%"></span><span class="robot b" style="left:80%;top:58%"></span><span class="robot b" style="left:70%;top:80%"></span>' +
+      '<span class="ball" style="left:49%;top:47%"></span>');
+    if (!reduce){
+      // ball drift + robot shuffle on loop
+      const ball = pitch.querySelector('.ball');
+      const robots = pitch.querySelectorAll('.robot');
+      let t = 0;
+      setInterval(()=>{
+        t++;
+        ball.style.transform = `translate(${Math.sin(t*.7)*30 + 40}px, ${Math.cos(t*.9)*18}px)`;
+        robots.forEach((r,i)=>{ r.style.transform = `translate(${Math.sin(t*.5+i)*14}px, ${Math.cos(t*.4+i*2)*10}px)`; });
+      }, 1500);
+    }
+  }
+
   // bizowl chat + memory
   const owlChat = document.getElementById('owlChat');
   const owlMem = document.getElementById('owlMem');
